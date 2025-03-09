@@ -75,19 +75,25 @@ export default {
       console.log(value);
       if(this.auth!==null){
       axios
-        .get(urls().products + "/byid/" + value + "/" + this.auth.userId, {})
+        .post(urls().products + "/byid", {
+          productId: value,
+          userId: this.auth.userId,
+        })
         .then((response) => {
           this.product = response.data;
           console.log(this.product);
         });
       }
       else{
-        axios
-        .get(urls().products + "/byid/" + value, {})
-        .then((response) => {
-          this.product = response.data;
-          console.log(this.product);
-        });
+        // axios
+        // .get(urls().products + "/byid" , {
+        //   productId: value,
+        //   userId: null
+        // })
+        // .then((response) => {
+        //   this.product = response.data;
+        //   console.log(this.product);
+        // });
       }
     },
   },

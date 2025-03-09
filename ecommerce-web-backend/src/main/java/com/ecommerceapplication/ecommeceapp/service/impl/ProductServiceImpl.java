@@ -139,11 +139,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getRecentProducts(Integer userId){
-        List< Product> products=  orderRepo.getRecentProducts(userId);
-//        List< Product> products=  orderRepo.getTopProducts();
-        List<ProductDTO> productDTO=products.stream().map(product -> ProductDTO.toDTO(product)).collect(Collectors.toList()).subList(0,5);
-        return productDTO;
+    public List<ProductDTO> getRecentProducts(Integer userId) {
+        List<Product> products = orderRepo.getRecentProducts(userId);
+
+        // Convert to DTO list
+        List<ProductDTO> productDTOs = products.stream()
+                .map(ProductDTO::toDTO)
+                .collect(Collectors.toList());
+
+        // Ensure we only take up to 5 items
+        return productDTOs.subList(0, Math.min(5, productDTOs.size()));
     }
 
     @Override
