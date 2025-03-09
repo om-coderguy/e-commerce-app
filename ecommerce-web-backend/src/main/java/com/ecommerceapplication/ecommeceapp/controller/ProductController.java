@@ -131,7 +131,7 @@ public class ProductController {
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/byid")
+    @PostMapping("/byid")
     public ResponseEntity<?> getProductById(@RequestBody RecentProductDTO recentProductDTO) {
 
         Product product;
