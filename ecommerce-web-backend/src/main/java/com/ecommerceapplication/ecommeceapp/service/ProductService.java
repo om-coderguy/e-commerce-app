@@ -28,5 +28,5 @@ public interface ProductService {
 
      List<ProductInventoryDTO> getProductsInventoryBySellerUserId(Integer userId);
 
-//     ProductDTO updateProduct(Integer productId, ProductDTO productDTO);
+//     ProductDTO updateProduct(Integer productId, ProductDTO productDTO);+
 }
