@@ -9,6 +9,8 @@ import RegisterDelivery from '../components/delivery/RegisterDelivery.vue'
 import DeliveryHome from '../components/delivery/DeliveryHome.vue'
 import BuyProduct from '../components/site-user/BuyProduct.vue'
 import Unauthorized from '@/components/home/Unauthorized.vue'
+import ProductDetails from '@/components/site-user/ProductDetails.vue'
+
 
 Vue.use(Router)
 
@@ -92,6 +94,11 @@ const router = new Router({
       name: 'Buy Product',
       component: BuyProduct,
       meta: { requiresAuth: true, allowedRoles: [UserTypes.SITE_USER] },
+    },
+    {
+      path: '/ProductDetails/:productId',
+      name: 'Product Details',
+      component: ProductDetails,
     },
     {
       path: '/unauthorized',

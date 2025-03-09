@@ -19,4 +19,8 @@ public interface OrderService {
     List<OrderDTO> getOrdersBySellerUserId(Integer userId);
 
     void deleteOrderById(Integer orderId);
+
+    List<OrderDTO> getOrdersByUserId(Integer userId);
+
+
 }

@@ -7,6 +7,7 @@ import com.ecommerceapplication.ecommeceapp.entity.Product;
 import com.ecommerceapplication.ecommeceapp.entity.User;
 import com.ecommerceapplication.ecommeceapp.exception.CustomException;
 import com.ecommerceapplication.ecommeceapp.exception.ResourceNotFoundException;
+import com.ecommerceapplication.ecommeceapp.repository.UserRepository;
 import com.ecommerceapplication.ecommeceapp.service.NotificationService;
 import com.ecommerceapplication.ecommeceapp.repository.OrderRepository;
 import com.ecommerceapplication.ecommeceapp.service.OrderService;
@@ -39,6 +40,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
@@ -141,6 +145,16 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepo.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
         orderRepo.delete(order);
+    }
+
+    // Fetch orders by user ID
+    @Override
+    public List<OrderDTO> getOrdersByUserId(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("User Not Found at Id - "+userId));
+        List<Order> orders= orderRepo.findByUser(user);
+        return orders.stream()
+                .map(OrderDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
 }

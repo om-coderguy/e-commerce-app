@@ -82,6 +82,20 @@ public class OrderController {
         }
     }
 
+    // Fetch all orders for a specific user
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getUserOrders(@PathVariable("userId") Integer userId) {
+        try {
+            LOGGER.info("Fetching orders for user ID: {}", userId);
+            List<OrderDTO> orders = orderService.getOrdersByUserId(userId);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Error fetching orders: {}", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching user orders.");
+        }
+    }
+
     @DeleteMapping("/{orderId}")
     public ResponseEntity<String> deleteOrder(@PathVariable Integer orderId) {
         try {

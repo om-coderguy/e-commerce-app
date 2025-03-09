@@ -1,5 +1,5 @@
 <template>
-    <div class="all-products">
+    <div class="all-products d-flex flex-wrap">
       <v-card
         class="ma-5 blue lighten-4"
         max-width="280"
@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     userOrders() {
-      axios.get(urls().orders+"/"+this.auth.userId, {}).then((response) => {
+      axios.get(urls().orders+"/user/"+this.auth.userId, {}).then((response) => {
         this.orders = response.data;
         console.log(this.orders);
       });
