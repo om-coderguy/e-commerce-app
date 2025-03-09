@@ -8,6 +8,8 @@ import RegisterSeller from '../components/seller/RegisterSeller.vue'
 import RegisterDelivery from '../components/delivery/RegisterDelivery.vue'
 import DeliveryHome from '../components/delivery/DeliveryHome.vue'
 import BuyProduct from '../components/site-user/BuyProduct.vue'
+import Unauthorized from '@/components/home/Unauthorized.vue'
+import ProductDetails from '@/components/site-user/ProductDetails.vue'
 
 
 Vue.use(Router)
@@ -59,5 +61,15 @@ export default new Router({
       name: 'Buy Product',
       component: BuyProduct
     },
+    {
+      path: '/ProductDetails/:productId',
+      name: 'Product Details',
+      component: ProductDetails,
+    },
+    {
+      path: '/unauthorized',
+      name: 'Unauthorized',
+      component: Unauthorized,
+    }
   ]
 })

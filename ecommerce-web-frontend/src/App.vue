@@ -1,11 +1,13 @@
 <template>
   <v-app>
     <HeaderEcom />
-    <CategoryCont v-if="isCat" />
-    <!-- <SellerHome v-if="isSeller"/> -->
-    <SwiperProducts v-if="false"/>
-    <DashBoard v-if="isDash" />
-    <router-view :key="$route.path" />
+    <div :style="{ height: 'calc(100vh - 205px)', overflow: 'auto' }">
+      <CategoryCont v-if="isCat" />
+      <!-- <SellerHome v-if="isSeller"/> -->
+      <!-- <SwiperProducts v-if="false"/> -->
+      <DashBoard v-if="isDash" />
+      <router-view :key="$route.path" />
+    </div>
     <FooterEcom class="mt-6" />
   </v-app>
 </template>
@@ -14,7 +16,7 @@ import HeaderEcom from "./components/home/Header.vue";
 import FooterEcom from "./components/home/Footer.vue";
 import DashBoard from "./components/home/Dashboard.vue";
 import CategoryCont from "./components/category/CategoryLinks.vue";
-import SwiperProducts from './components/SwiperProducts.vue';
+// import SwiperProducts from './components/SwiperProducts.vue';
 // import SellerHome from './components/SellerHome.vue'
 
 export default {
@@ -27,7 +29,7 @@ export default {
     FooterEcom,
     DashBoard,
     CategoryCont,
-    SwiperProducts,
+    // SwiperProducts,
     // SellerHome,
   },
   created() {

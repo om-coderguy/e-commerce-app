@@ -21,23 +21,74 @@
         <!-- <SwiperComponent :mediaItems="topProducts"/> -->
         <h2 class="mt-4 mb-3">Deals of the day</h2>
         <template>
-          <v-carousel hide-delimiters height="180">
-            <v-carousel-item v-for="item in topProducts" :key="item.name">
-              <v-layout>
-                <v-flex xs3 class="green lighten-4 text-center pb-3 pt-3">
-                  <!-- <v-row> -->
-                  {{ item.name }}
-                  {{ item.descr }}<br />
-                  <span class="discount">{{ item.discount }}% off</span><br />
-                  <span class="discount">₹ {{ item.cost }} </span><br />
-                  <v-btn class="mb-2" color="red lighten-3" @click="buyNow(item.id)"
-                    >Buy Now </v-btn
-                  ><br />
-                  <v-btn color="orange lighten-2" @click="addToCart(item.id)">
-                    Add To Cart
-                  </v-btn>
+          <v-carousel hide-delimiters height="250">
+            <!-- Grouping 4 products per carousel item -->
+            <v-carousel-item
+              v-for="(chunk, index) in Math.ceil(topProducts.length / 4)"
+              :key="index"
+              style="height: 100%;"
+            >
+              <v-layout style="height: 100%;">
+                <v-flex
+                  v-for="item in topProducts.slice(index * 4, index * 4 + 4)"
+                  :key="item.name"
+                  xs3
+                  class="green lighten-4 text-center pb-3 pt-3 mx-2 d-flex align-center"
+                  @click="showProductDetails(item.id)"
+                >
+                  <!-- Dummy Image on the Left -->
+                  <div style="width: 150px; margin: 10px;">
+                    <v-img
+                      :src="
+                        product?.image || require('@/assets/DefaultProduct.png')
+                      "
+                      alt="Product Image"
+                    ></v-img>
+                  </div>
 
-                  <!-- </v-row> -->
+                  <!-- Product Details -->
+                  <div class="text-left">
+                    <strong>{{ item.name }}</strong
+                    ><br />
+                    {{ item.descr }}<br />
+
+                    <!-- Discount with Color -->
+                    <span
+                      class="discount"
+                      style="color: red; font-weight: bold"
+                    >
+                      {{ item.discount }}% off </span
+                    ><br />
+
+                    <!-- Discounted Price and Original Price -->
+                    <span class="discounted-price"
+                      >₹
+                      {{
+                        (item.cost - (item.cost * item.discount) / 100).toFixed(
+                          2
+                        )
+                      }}</span
+                    >
+                    <span
+                      class="original-price"
+                      style="text-decoration: line-through; margin-left: 8px"
+                    >
+                      ₹ {{ item.cost }} </span
+                    ><br />
+
+                    <!-- Action Buttons -->
+                    <v-btn
+                      class="mb-2"
+                      color="red lighten-3"
+                      @click.stop="buyNow(item.id)"
+                      >Buy Now</v-btn
+                    ><br />
+                    <v-btn
+                      color="orange lighten-2"
+                      @click.stop="addToCart(item.id)"
+                      >Add To Cart</v-btn
+                    >
+                  </div>
                 </v-flex>
               </v-layout>
             </v-carousel-item>
@@ -47,23 +98,75 @@
       <div class="all-products">
         <h2 class="mt-4 mb-3">All Products</h2>
         <template>
-          <v-carousel hide-delimiters height="180">
-            <v-carousel-item v-for="item in allProducts" :key="item.id">
-              <v-flex xs3 class="green lighten-4 text-center pb-3 pt-3">
-                <!-- <v-row> -->
-                {{ item.name }}
-                {{ item.descr }}<br />
-                <span class="discount" min-height="50"
-                  >{{ item.discount }}% off</span
-                ><br />
-                <span class="discount">₹ {{ item.cost }}</span
-                ><br />
-                <v-btn class="mb-2" color="red lighten-3" @click="buyNow(item.id)">Buy Now</v-btn><br />
-                <v-btn color="orange lighten-2" @click="addToCart(item.id)"
-                  >Add To Cart</v-btn
+          <v-carousel hide-delimiters height="250">
+            <!-- Grouping 4 products per carousel item -->
+            <v-carousel-item
+              v-for="(chunk, index) in Math.ceil(allProducts.length / 4)"
+              :key="index" style="height: 100%;"
+            >
+              <v-layout style="height: 100%;">
+                <v-flex
+                  v-for="item in allProducts.slice(index * 4, index * 4 + 4)"
+                  :key="item.name"
+                  xs3
+                  class="green lighten-4 text-center pb-3 pt-3 mx-2 d-flex align-center"
+                  @click="showProductDetails(item.id)"
                 >
-                <!-- </v-row> -->
-              </v-flex>
+                  <!-- Dummy Image on the Left -->
+                  <div style="width: 150px; margin: 10px;">
+                    <v-img
+                      :src="
+                        product?.image || require('@/assets/DefaultProduct.png')
+                      "
+                      alt="Product Image"
+                    ></v-img>
+                  </div>
+
+                  <!-- Product Details -->
+                  <div class="text-left">
+                    <strong>{{ item.name }}</strong
+                    ><br />
+                    {{ item.descr }}<br />
+
+                    <!-- Discount with Color -->
+                    <span
+                      class="discount"
+                      style="color: red; font-weight: bold"
+                    >
+                      {{ item.discount }}% off </span
+                    ><br />
+
+                    <!-- Discounted Price and Original Price -->
+                    <span class="discounted-price"
+                      >₹
+                      {{
+                        (item.cost - (item.cost * item.discount) / 100).toFixed(
+                          2
+                        )
+                      }}</span
+                    >
+                    <span
+                      class="original-price"
+                      style="text-decoration: line-through; margin-left: 8px"
+                    >
+                      ₹ {{ item.cost }} </span
+                    ><br />
+
+                    <!-- Action Buttons -->
+                    <v-btn
+                      class="mb-2"
+                      color="red lighten-3"
+                      @click.stop="buyNow(item.id)"
+                      >Buy Now</v-btn
+                    ><br />
+                    <v-btn
+                      color="orange lighten-2"
+                      @click.stop="addToCart(item.id)"
+                      >Add To Cart</v-btn
+                    >
+                  </div>
+                </v-flex>
+              </v-layout>
             </v-carousel-item>
           </v-carousel>
         </template>
@@ -71,23 +174,75 @@
       <div class="recent-products" v-if="auth !== null">
         <h2 class="mt-4 mb-3">Recently viewed products</h2>
         <template>
-          <v-carousel hide-delimiters height="180">
-            <v-carousel-item v-for="item in recentProducts" :key="item.name">
-              <v-flex xs3 class="green lighten-4 text-center pb-3 pt-3">
-                <!-- <v-row> -->
-                {{ item.name }}
-                {{ item.descr }}<br />
-                <span class="discount">{{ item.discount }}% off</span><br />
-                <span class="discount">₹ {{ item.cost }}</span
-                ><br />
-                <v-btn class="mb-2" color="red lighten-3" @click="buyNow(item.id)"
-                  >Buy Now</v-btn
-                ><br />
-                <v-btn color="orange lighten-2" @click="addToCart(item.id)"
-                  >Add To Cart</v-btn
+          <v-carousel hide-delimiters height="250">
+            <!-- Grouping 4 products per carousel item -->
+            <v-carousel-item
+              v-for="(chunk, index) in Math.ceil(recentProducts.length / 4)"
+              :key="index" style="height: 100%;"
+            >
+              <v-layout style="height: 100%;">
+                <v-flex
+                  v-for="item in recentProducts.slice(index * 4, index * 4 + 4)"
+                  :key="item.name"
+                  xs3
+                  class="green lighten-4 text-center pb-3 pt-3 mx-2 d-flex align-center"
+                  @click="showProductDetails(item.id)"
                 >
-                <!-- </v-row> -->
-              </v-flex>
+                  <!-- Dummy Image on the Left -->
+                  <div style="width: 150px; margin: 10px;">
+                    <v-img
+                      :src="
+                        product?.image || require('@/assets/DefaultProduct.png')
+                      "
+                      alt="Product Image"
+                    ></v-img>
+                  </div>
+
+                  <!-- Product Details -->
+                  <div class="text-left">
+                    <strong>{{ item.name }}</strong
+                    ><br />
+                    {{ item.descr }}<br />
+
+                    <!-- Discount with Color -->
+                    <span
+                      class="discount"
+                      style="color: red; font-weight: bold"
+                    >
+                      {{ item.discount }}% off </span
+                    ><br />
+
+                    <!-- Discounted Price and Original Price -->
+                    <span class="discounted-price"
+                      >₹
+                      {{
+                        (item.cost - (item.cost * item.discount) / 100).toFixed(
+                          2
+                        )
+                      }}</span
+                    >
+                    <span
+                      class="original-price"
+                      style="text-decoration: line-through; margin-left: 8px"
+                    >
+                      ₹ {{ item.cost }} </span
+                    ><br />
+
+                    <!-- Action Buttons -->
+                    <v-btn
+                      class="mb-2"
+                      color="red lighten-3"
+                      @click.stop="buyNow(item.id)"
+                      >Buy Now</v-btn
+                    ><br />
+                    <v-btn
+                      color="orange lighten-2"
+                      @click.stop="addToCart(item.id)"
+                      >Add To Cart</v-btn
+                    >
+                  </div>
+                </v-flex>
+              </v-layout>
             </v-carousel-item>
           </v-carousel>
         </template>
@@ -191,6 +346,9 @@ export default {
     buyNow(value) {
       console.log(value);
       this.$router.push("/buy/" + value);
+    },
+    showProductDetails(value) {
+      window.location.href = `/ProductDetails/${value}`;
     },
   },
 };

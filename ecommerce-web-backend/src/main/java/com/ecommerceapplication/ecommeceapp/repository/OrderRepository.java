@@ -2,6 +2,7 @@ package com.ecommerceapplication.ecommeceapp.repository;
 
 import com.ecommerceapplication.ecommeceapp.entity.Order;
 import com.ecommerceapplication.ecommeceapp.entity.Product;
+import com.ecommerceapplication.ecommeceapp.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,5 +20,7 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
     List<Order> findByProduct_Seller_User_UserId(Integer userId);
 
     void deleteOrderById(Integer orderId);
+
+    List<Order> findByUser(User user);
 
 }

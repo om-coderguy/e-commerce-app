@@ -17,7 +17,7 @@
 
     <v-app-bar color="Blue" elevate-on-scroll>
       <v-toolbar-title>
-        <v-btn @click="getRoute" class="appbar-title" plain >
+        <v-btn @click="getRoute" class="appbar-title" plain>
           <v-img
             :src="require('../../assets/ecommerce.png')"
             height="25"
@@ -315,7 +315,7 @@ export default {
     convertToSeller() {
       console.log(this.auth);
       axios
-        .post(urls().seller+"/convert-seller", {
+        .post(urls().seller + "/convert-seller", {
           userId: this.auth.userId,
           companyName: this.companyName,
           gstIn: this.gstin,
@@ -347,7 +347,7 @@ export default {
           break;
 
         case "orders":
-          this.$router.push("orders");
+          window.location.href = "http://localhost:8081/orders";
           break;
 
         case "logout":

@@ -15,16 +15,23 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <v-row class="mt-3 ml-3">
+    <v-row class="pt-3 pl-3" style="width: 100%;">
       <v-card
         class="ma-3 green lighten-4"
-        max-width="280"
+        max-width="350"
         outlined
         v-for="product in productsByCat"
         :key="product.id"
+        @click="productDetails(product.id)"
       >
         <v-col cols="12">
-          <v-list-item >
+          <v-list-item>
+            <v-list-item-avatar size="100">
+              <v-img
+                :src="product.image || require('@/assets/DefaultProduct.png')"
+                alt="Product Image"
+              ></v-img>
+            </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title class="text-h5 mb-4">
                 {{ product.name }}
@@ -38,13 +45,17 @@
 
           <br />
           <div class="ml-3">
-            <v-btn class="mb-2" color="red lighten-3" @click="buyNow(product.id)">
+            <v-btn
+              class="mb-2"
+              color="red lighten-3"
+              @click.stop="buyNow(product.id)"
+            >
               Buy Now </v-btn
             ><br />
             <v-btn
               class="mb-4"
               color="orange lighten-2"
-              @click="addToCart(product.id)"
+              @click.stop="addToCart(product.id)"
             >
               Add To Cart
             </v-btn>
@@ -102,9 +113,12 @@ export default {
           });
       }
     },
-    buyNow(value){
-      this.$router.push("/buy/"+value)
-    }
+    buyNow(value) {
+      this.$router.push("/buy/" + value);
+    },
+    productDetails(value) {
+      window.location.href = `/ProductDetails/${value}`;
+    },
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div id="footer">
-    <v-footer class="footer pa-6">
+    <v-footer class="footer" style="padding: 10px 150px;">
       <ul class="flex-container">
         <li class="links">
           About
