@@ -1,6 +1,4 @@
 package com.ecommerceapplication.ecommeceapp.controller;
-
-
 import com.ecommerceapplication.ecommeceapp.dto.CartDTO;
 import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
 import com.ecommerceapplication.ecommeceapp.entity.Cart;
@@ -13,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/api/carts")

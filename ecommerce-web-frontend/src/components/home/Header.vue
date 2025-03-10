@@ -347,7 +347,7 @@ export default {
           break;
 
         case "orders":
-          window.location.href = "http://localhost:8081/orders";
+          window.location.href = "/orders";
           break;
 
         case "logout":

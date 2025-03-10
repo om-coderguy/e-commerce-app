@@ -1,11 +1,12 @@
 package com.ecommerceapplication.ecommeceapp.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class RecentProductDTO {
+@Getter
+@Setter
+public class LikeDTO {
     private Integer productId;
-
     private Integer userId;
-
+    private boolean liked;
 }

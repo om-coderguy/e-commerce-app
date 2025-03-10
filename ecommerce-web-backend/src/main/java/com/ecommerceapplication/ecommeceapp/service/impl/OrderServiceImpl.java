@@ -82,9 +82,9 @@ public class OrderServiceImpl implements OrderService {
                 throw new CustomException("Only Site user can place order");
             }
             Product product = productService.getByProductId(orderDTO.getProductId());
-            int quantity = product.getInventory().getTotalQuantity();
+            int quantity = (product.getInventory() != null) ? product.getInventory().getTotalQuantity() : 0;
             if (quantity <= 0) {
-                throw new CustomException("Product is not available");
+                return null;
             } else if (quantity < orderDTO.getQuantity()) {
                 throw new CustomException("Order quantity is not present. Only " + quantity + " left in stock");
             }

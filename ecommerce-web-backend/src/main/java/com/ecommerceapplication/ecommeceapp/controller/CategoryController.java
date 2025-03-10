@@ -1,7 +1,6 @@
 package com.ecommerceapplication.ecommeceapp.controller;
 
 import com.ecommerceapplication.ecommeceapp.dto.CategoryDTO;
-import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
 import com.ecommerceapplication.ecommeceapp.entity.Category;
 import com.ecommerceapplication.ecommeceapp.service.CategoryService;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/categories")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;

@@ -5,6 +5,7 @@ import com.ecommerceapplication.ecommeceapp.entity.Seller;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SellerService {
     public List<Seller> getAllSellers();
@@ -13,4 +14,5 @@ public interface SellerService {
 
     public Seller saveSeller(Seller seller);
 
+    Map<String, Object> registerSeller(SellerDTO sellerDTO);
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -64,6 +65,43 @@ public class SellerServiceImpl implements SellerService {
             throw new CustomException("Unhandled exception while registering seller\n. Error-Message = "+ex.getMessage());
         }
         return seller;
+    }
+
+    @Override
+    public Map<String, Object> registerSeller(SellerDTO sellerDTO) {
+        // Step 1: Create and save the User entity
+        User user = createUserFromDTO(sellerDTO);
+        user = userService.saveUser(user);
+
+        // Step 2: Create and save the Seller entity
+        Seller seller = SellerDTO.toSeller(sellerDTO, user);
+        seller = sellerRepo.save(seller);
+
+        // Step 3: Prepare response map
+        return prepareResponse(seller);
+    }
+
+    // Helper method to map SellerDTO to User entity
+    private User createUserFromDTO(SellerDTO sellerDTO) {
+        User user = new User();
+        user.setUserName(sellerDTO.getUserName());
+        user.setPassword(sellerDTO.getPassword());
+        user.setName(sellerDTO.getOwnerName()); // Ensure correct field name
+        user.setMobileNo(sellerDTO.getMobileNo());
+        user.setUserType(UserType.SELLER);
+        return user;
+    }
+
+    // Helper method to prepare response map
+    private Map<String, Object> prepareResponse(Seller seller) {
+        return Map.of(
+                "email", seller.getUser().getUserName(),
+                "name", seller.getUser().getName(),
+                "userId", seller.getUser().getUserId(),
+                "sellerId", seller.getSellerId(),
+                "userName", seller.getUser().getUserName(),
+                "userType", seller.getUser().getUserType().toString()
+        );
     }
 
 }

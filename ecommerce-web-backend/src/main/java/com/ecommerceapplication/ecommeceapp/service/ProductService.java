@@ -1,13 +1,14 @@
 package com.ecommerceapplication.ecommeceapp.service;
-import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
-import com.ecommerceapplication.ecommeceapp.dto.ProductInventoryDTO;
-import com.ecommerceapplication.ecommeceapp.dto.RecentProductDTO;
+import com.ecommerceapplication.ecommeceapp.dto.*;
 import com.ecommerceapplication.ecommeceapp.entity.Order;
 import com.ecommerceapplication.ecommeceapp.entity.Product;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
+
+     Map<String, Object> addProduct(ProductDTO productDTO);
      List<Product> getAllProducts();
 
      Product getByProductId(int productId);
@@ -18,7 +19,7 @@ public interface ProductService {
 
      List<ProductDTO> getRecentProducts(Integer userId);
 
-     Product saveProduct(ProductDTO productDTO) throws Exception;
+//     Product saveProduct(ProductDTO productDTO) throws Exception;
 
      Product updateProduct(ProductDTO productDTO, int productId) throws Exception;
 
@@ -28,5 +29,13 @@ public interface ProductService {
 
      List<ProductInventoryDTO> getProductsInventoryBySellerUserId(Integer userId);
 
-//     ProductDTO updateProduct(Integer productId, ProductDTO productDTO);+
+     Product addSpecification(Integer productId, SpecificationDTO request);
+
+     ProductDTO processRecentProduct(RecentProductDTO recentProductDTO);
+
+     String saveLike(LikeDTO likeDTO);
+
+     String saveReview(ReviewDTO reviewDTO);
+
+     List<ReviewDTO> getReviewsByProductId(Integer productId);
 }
