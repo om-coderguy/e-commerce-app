@@ -82,7 +82,6 @@ const router = new Router({
       path: '/register/seller',
       name: 'Register Seller',
       component: RegisterSeller,
-      meta: { requiresAuth: true, allowedRoles: [ UserTypes.SELLER] },
     },
     {
       path: '/register/delivery',
