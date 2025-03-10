@@ -49,38 +49,52 @@ public class SellerController {
         LOGGER.info("Received request to register seller\n");
 
         try {
-            // Step 1: Create the user
-            User user = new User();
-            user.setUserName(sellerDTO.getUserName());
-            user.setPassword(sellerDTO.getPassword());
-            user.setName(sellerDTO.getOwnerName()); // Ensure correct field name
-            user.setMobileNo(sellerDTO.getMobileNo());
-            user.setUserType(UserType.SELLER);
-
-            user = userService.saveUser(user); // Save and retrieve the created user
-
-            // Step 2: Create Seller
-            Seller seller = SellerDTO.toSeller(sellerDTO, user);
-            seller = sellerService.saveSeller(seller);
-
-            // Step 3: Prepare Response in the desired format
-            Map<String, Object> response = Map.of(
-                    "email", seller.getUser().getUserName(),
-                    "name", seller.getUser().getName(),
-                    "userId", seller.getUser().getUserId(),
-                    "sellerId", seller.getSellerId(),
-                    "userName", seller.getUser().getUserName(),
-                    "userType", seller.getUser().getUserType().toString()
-            );
-
+            Map<String, Object> response = sellerService.registerSeller(sellerDTO);
             LOGGER.info("Seller registration successful");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-
         } catch (Exception ex) {
             LOGGER.error("Error in seller registration: {}", ex.getMessage());
             return new ResponseEntity<>("Error in Saving Seller info: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @PostMapping("/register")
+//    public ResponseEntity<?> saveSeller(@RequestBody SellerDTO sellerDTO) {
+//        LOGGER.info("Received request to register seller\n");
+//
+//        try {
+//            // Step 1: Create the user
+//            User user = new User();
+//            user.setUserName(sellerDTO.getUserName());
+//            user.setPassword(sellerDTO.getPassword());
+//            user.setName(sellerDTO.getOwnerName()); // Ensure correct field name
+//            user.setMobileNo(sellerDTO.getMobileNo());
+//            user.setUserType(UserType.SELLER);
+//
+//            user = userService.saveUser(user); // Save and retrieve the created user
+//
+//            // Step 2: Create Seller
+//            Seller seller = SellerDTO.toSeller(sellerDTO, user);
+//            seller = sellerService.saveSeller(seller);
+//
+//            // Step 3: Prepare Response in the desired format
+//            Map<String, Object> response = Map.of(
+//                    "email", seller.getUser().getUserName(),
+//                    "name", seller.getUser().getName(),
+//                    "userId", seller.getUser().getUserId(),
+//                    "sellerId", seller.getSellerId(),
+//                    "userName", seller.getUser().getUserName(),
+//                    "userType", seller.getUser().getUserType().toString()
+//            );
+//
+//            LOGGER.info("Seller registration successful");
+//            return new ResponseEntity<>(response, HttpStatus.CREATED);
+//
+//        } catch (Exception ex) {
+//            LOGGER.error("Error in seller registration: {}", ex.getMessage());
+//            return new ResponseEntity<>("Error in Saving Seller info: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     @PostMapping("/convert-seller")
     public ResponseEntity<?> convertseller(@RequestBody SellerDTO sellerDTO) {

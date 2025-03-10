@@ -2,20 +2,19 @@ package com.ecommerceapplication.ecommeceapp.service.impl;
 
 import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
 import com.ecommerceapplication.ecommeceapp.dto.ProductInventoryDTO;
+import com.ecommerceapplication.ecommeceapp.dto.RecentProductDTO;
 import com.ecommerceapplication.ecommeceapp.dto.SpecificationDTO;
 import com.ecommerceapplication.ecommeceapp.entity.*;
 import com.ecommerceapplication.ecommeceapp.exception.CustomException;
 import com.ecommerceapplication.ecommeceapp.exception.ResourceNotFoundException;
-import com.ecommerceapplication.ecommeceapp.repository.CategoryRepository;
-import com.ecommerceapplication.ecommeceapp.repository.OrderRepository;
-import com.ecommerceapplication.ecommeceapp.repository.ProductRepository;
-import com.ecommerceapplication.ecommeceapp.repository.SellerRepository;
+import com.ecommerceapplication.ecommeceapp.repository.*;
 import com.ecommerceapplication.ecommeceapp.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +48,8 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-
+    @Autowired
+    private RecentProductRepository recentProductRepo;
 //
 
     @Override
@@ -193,4 +193,41 @@ public class ProductServiceImpl implements ProductService {
         return productRepo.save(product);
     }
 
+    @Override
+    public ProductDTO processRecentProduct(RecentProductDTO recentProductDTO) {
+        Product product = productRepo.findById(recentProductDTO.getProductId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        User user = userService.getUserById(recentProductDTO.getUserId());
+        List<RecentProduct> recentProducts = user.getRecentProducts();
+
+        if (recentProducts.isEmpty()) {
+            recentProducts = new ArrayList<>();
+            addNewRecentProduct(recentProducts, product, user);
+        }
+
+        boolean isNewProduct = true;
+        for (RecentProduct recentProduct : recentProducts) {
+            if (recentProduct.getProduct().getId().equals(recentProductDTO.getProductId())) {
+                recentProduct.setCount(recentProduct.getCount() + 1);
+                recentProductRepo.save(recentProduct);
+                isNewProduct = false;
+                break;
+            }
+        }
+
+        if (isNewProduct) {
+            addNewRecentProduct(recentProducts, product, user);
+        }
+
+        return ProductDTO.toDTO(product);
+    }
+
+    private void addNewRecentProduct(List<RecentProduct> recentProducts, Product product, User user) {
+        RecentProduct newProduct = new RecentProduct();
+        newProduct.setProduct(product);
+        newProduct.setUser(user);
+        newProduct.setCount(1L);
+        recentProducts.add(newProduct);
+        recentProductRepo.save(newProduct);
+    }
 }

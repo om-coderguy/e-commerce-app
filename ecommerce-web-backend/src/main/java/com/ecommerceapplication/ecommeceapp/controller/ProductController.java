@@ -113,8 +113,6 @@ public class ProductController {
         }
     }
 
-
-
     @GetMapping()
     public ResponseEntity<?> getAllProducts() {
         LOGGER.info("Received request to get all the products");
@@ -123,7 +121,6 @@ public class ProductController {
         try {
             products = productService.getAllProducts();
             productDTO = products.stream().map(product -> ProductDTO.toDTO(product)).filter(product -> product.isActive()).collect(Collectors.toList());
-//            productDTO = productDTO.stream().filter(product -> product.isActive()).collect(Collectors.toList());
             LOGGER.info("Get Request for products Successful");
         } catch (Exception ex) {
             LOGGER.error("Get Request for products Unsuccessful\n" + ex.getMessage());
@@ -134,49 +131,13 @@ public class ProductController {
 
     @PostMapping("/byid")
     public ResponseEntity<?> getProductById(@RequestBody RecentProductDTO recentProductDTO) {
-
-        Product product;
-        ProductDTO productDTO;
-
         try {
-            product = productService.getByProductId(recentProductDTO.getProductId());
-            User user = userService.getUserById(recentProductDTO.getUserId());
-            List<RecentProduct> recentProducts = user.getRecentProducts();
-            if (user.getRecentProducts().size() == 0) {
-                recentProducts = new ArrayList<RecentProduct>();
-                RecentProduct newProduct = new RecentProduct();
-                newProduct.setProduct(product);
-                newProduct.setUser(user);
-                newProduct.setCount(1L);
-                recentProducts.add(newProduct);
-                recentProductRepo.save(newProduct);
-        }
-            boolean flag = true;
-            if (recentProducts.size() != 0) {
-                recentProducts = user.getRecentProducts();
-                List<RecentProduct> temp = recentProducts;
-                for (RecentProduct recentProduct : recentProducts) {
-                    if (recentProduct.getProduct().getId() == recentProductDTO.getProductId()) {
-                        recentProduct.setCount(recentProduct.getCount() + 1);
-                        recentProductRepo.save(recentProduct);
-                        flag = false;
-                    }
-                }
-            }
-            if (flag || recentProducts.size() == 0) {
-                RecentProduct newProduct = new RecentProduct();
-                newProduct.setProduct(product);
-                newProduct.setUser(user);
-                newProduct.setCount(1L);
-                recentProducts.add(newProduct);
-                recentProductRepo.save(newProduct);
-            }
+            ProductDTO productDTO = productService.processRecentProduct(recentProductDTO);
             LOGGER.info("Request for product Successful " + recentProductDTO.getProductId());
-            productDTO = ProductDTO.toDTO(product);
             return new ResponseEntity<>(productDTO, HttpStatus.OK);
         } catch (Exception ex) {
-            LOGGER.error("Request for product Unsuccessful" + recentProductDTO.getProductId() + "\n Exception = " + ex.getMessage());
-            return new ResponseEntity<>("Enable to fetch the product for Id - " + recentProductDTO.getProductId() + "Exception  " + ex, HttpStatus.INTERNAL_SERVER_ERROR);
+            LOGGER.error("Request for product Unsuccessful " + recentProductDTO.getProductId() + "\n Exception = " + ex.getMessage());
+            return new ResponseEntity<>("Unable to fetch the product for Id - " + recentProductDTO.getProductId() + " Exception: " + ex, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -187,8 +148,6 @@ public class ProductController {
         List<ProductDTO> productDTO;
         try {
             List<ProductDTO> productDTOs = productService.getTopProducts();
-//            products = productService.getTopProducts().stream(). map(id -> productService.getByProductId(id)).collect(Collectors.toList());
-//            productDTO=products.stream().map(product -> ProductDTO.toDTO(product)).collect(Collectors.toList());
             LOGGER.info(" Request for top products Successfully");
             return new ResponseEntity<>(productDTOs, HttpStatus.OK);
         } catch (Exception ex) {
@@ -233,13 +192,9 @@ public class ProductController {
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getProductsByCategory(@PathVariable("id") int categoryID) {
         LOGGER.info("Received request to get similar products");
-//        List<Product> products;
-//        List<ProductDTO> productDTO;
         try {
             List<Product> products = productService.getSimilarProducts(categoryID);
             List<ProductDTO> productDTOs = products.stream().map(product -> ProductDTO.toDTO(product)).collect(Collectors.toList());
-//            products = productService.getTopProducts().stream(). map(id -> productService.getByProductId(id)).collect(Collectors.toList());
-//            productDTO=products.stream().map(product -> ProductDTO.toDTO(product)).collect(Collectors.toList());
             LOGGER.info(" Request for similar products Successful");
             return new ResponseEntity<>(productDTOs, HttpStatus.OK);
         } catch (Exception ex) {
