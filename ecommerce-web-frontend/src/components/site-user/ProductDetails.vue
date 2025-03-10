@@ -104,14 +104,14 @@
       this.auth = JSON.parse(localStorage.getItem("auth"));
       const productId = this.$route.params.productId;
       this.fetchProductById(productId);
-      this.fetchReviews();
+      this.fetchReviews(productId);
     },
   
     methods: {
       toggleLike() {
         this.isLiked = !this.isLiked;
         // Call a dummy API to record the like action
-        axios.post("https://jsonplaceholder.typicode.com/posts", {
+        axios.post(urls().products + "/like", {
           productId: this.product.id,
           userId: this.auth.userId,
           liked: this.isLiked,
@@ -121,10 +121,11 @@
       submitReview() {
         if (this.newReview.trim() !== "") {
           // Call a dummy API to submit the review
-          axios.post("https://jsonplaceholder.typicode.com/posts", {
+          axios.post(urls().products + "/review", {
             productId: this.product.id,
             userId: this.auth.userId,
-            content: this.newReview,
+            comment: this.newReview,
+            rating: 5,
           }).then(() => {
             // Add the new review to the list
             this.reviews.push({
@@ -147,14 +148,14 @@
         }
       },
   
-      fetchReviews() {
+      fetchReviews(productId) {
         // Fetch dummy reviews from a dummy API
-        axios.get("https://jsonplaceholder.typicode.com/comments?postId=1")
+        axios.post(urls().products+"/"+productId + "/reviews", {})
           .then((response) => {
             // Map the dummy data to match the review structure
             this.reviews = response.data.map((item) => ({
-              author: item.name,
-              content: item.body,
+              author: item.userName,
+              content: item.comment,
             }));
           });
       },

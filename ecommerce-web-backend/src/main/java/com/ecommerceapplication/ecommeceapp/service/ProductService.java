@@ -36,4 +36,6 @@ public interface ProductService {
      String saveLike(LikeDTO likeDTO);
 
      String saveReview(ReviewDTO reviewDTO);
+
+     List<ReviewDTO> getReviewsByProductId(Integer productId);
 }

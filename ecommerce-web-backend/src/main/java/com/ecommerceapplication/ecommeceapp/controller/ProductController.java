@@ -230,6 +230,7 @@ public class ProductController {
         }
     }
 
+    //save specifications for product in key value pair
     @PostMapping("/{productId}/specifications")
     public ResponseEntity<?> addSpecification(
             @PathVariable Integer productId,
@@ -242,16 +243,49 @@ public class ProductController {
         }
     }
 
+    // Save a like for a product
     @PostMapping("/like")
     public ResponseEntity<String> saveLike(@RequestBody LikeDTO likeDTO) {
-        String response = productService.saveLike(likeDTO);
-        return ResponseEntity.ok(response);
+        try {
+            String response = productService.saveLike(likeDTO);
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product or User not found");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while saving like");
+        }
     }
 
+    // Save a review for a product
     @PostMapping("/review")
     public ResponseEntity<String> saveReview(@RequestBody ReviewDTO reviewDTO) {
-        String response = productService.saveReview(reviewDTO);
-        return ResponseEntity.ok(response);
+        try {
+            String response = productService.saveReview(reviewDTO);
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product or User not found");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body("Invalid review data: " + ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while saving review");
+        }
     }
+
+    // Get all reviews for a product
+    @GetMapping("/{productId}/reviews")
+    public ResponseEntity<List<ReviewDTO>> getProductReviews(@PathVariable Integer productId) {
+        try {
+            List<ReviewDTO> reviews = productService.getReviewsByProductId(productId);
+            if (reviews.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(reviews);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 }

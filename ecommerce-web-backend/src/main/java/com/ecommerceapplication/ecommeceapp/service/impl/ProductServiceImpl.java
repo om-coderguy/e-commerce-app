@@ -299,4 +299,19 @@ public class ProductServiceImpl implements ProductService {
         reviewRepository.save(review);
         return "Review saved successfully";
     }
+
+    @Override
+    public List<ReviewDTO> getReviewsByProductId(Integer productId) {
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+
+        return reviews.stream().map(review -> {
+            ReviewDTO reviewDTO = new ReviewDTO();
+            reviewDTO.setId(review.getId());              // Review ID
+            reviewDTO.setUserName(review.getUser().getName()); // User's Name
+            reviewDTO.setRating(review.getRating());      // Rating
+            reviewDTO.setComment(review.getComment());    // Comment
+            return reviewDTO;
+        }).collect(Collectors.toList());
+    }
+
 }
