@@ -7,7 +7,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>My Orders</v-toolbar-title>
+        <v-toolbar-title class="text-h5 ">My Orders</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
@@ -174,7 +174,7 @@ export default {
     this.auth = JSON.parse(localStorage.getItem("auth"));
     console.log(this.auth);
     this.getAllOrders(this.auth.userId);
-    this.getDeliveryUsers();
+    // this.getDeliveryUsers();
   },
 
   methods: {

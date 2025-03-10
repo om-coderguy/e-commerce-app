@@ -37,6 +37,11 @@ public class Product {
     @Column(name = "active")
     private boolean active;
 
+    @Lob
+    @Column(name = "photo", columnDefinition = "LONGBLOB")
+    private byte[] photo;
+
+
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)
     private Seller seller;

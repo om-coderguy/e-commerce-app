@@ -1,9 +1,6 @@
 package com.ecommerceapplication.ecommeceapp.controller;
 
-import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
-import com.ecommerceapplication.ecommeceapp.dto.ProductInventoryDTO;
-import com.ecommerceapplication.ecommeceapp.dto.RecentProductDTO;
-import com.ecommerceapplication.ecommeceapp.dto.SpecificationDTO;
+import com.ecommerceapplication.ecommeceapp.dto.*;
 import com.ecommerceapplication.ecommeceapp.entity.*;
 import com.ecommerceapplication.ecommeceapp.repository.RecentProductRepository;
 import com.ecommerceapplication.ecommeceapp.repository.UserRepository;
@@ -55,29 +52,9 @@ public class ProductController {
         LOGGER.info("Received request to save product");
 
         try {
-            // Step 1: Fetch the Seller and Category
-            Seller seller = sellerService.getSellerById(productDTO.getSellerId());
-            Category category = categoryService.getCategoryById(productDTO.getCategoryId());
-
-            // Step 2: Create and Save the Product
-            Product product = ProductDTO.toEntity(productDTO, seller, category);
-            product = productService.saveProduct(ProductDTO.toDTO(product));
-
-            // Step 3: Prepare Response in Desired Format
-            Map<String, Object> response = Map.of(
-                    "productId", product.getId(),
-                    "name", product.getName(),
-                    "description", product.getDescr(),
-                    "cost", product.getCost(),
-                    "discount", product.getDiscount(),
-                    "active", product.isActive(),
-                    "sellerId", product.getSeller().getSellerId(),
-                    "categoryId", product.getCategory().getCatId()
-            );
-
+            Map<String, Object> response = productService.addProduct(productDTO);
             LOGGER.info("Product saved successfully");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-
         } catch (Exception ex) {
             LOGGER.error("Error while saving product: {}", ex.getMessage());
             return new ResponseEntity<>("Error in saving product: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -263,6 +240,18 @@ public class ProductController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<String> saveLike(@RequestBody LikeDTO likeDTO) {
+        String response = productService.saveLike(likeDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/review")
+    public ResponseEntity<String> saveReview(@RequestBody ReviewDTO reviewDTO) {
+        String response = productService.saveReview(reviewDTO);
+        return ResponseEntity.ok(response);
     }
 
 }

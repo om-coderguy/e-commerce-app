@@ -124,4 +124,9 @@ export default {
 </script>
 
 <style>
+.v-data-table-header tr > th{
+  font-size: 16px !important;
+  font-weight: bold;
+  color: #411085 !important;
+}
 </style>

@@ -31,6 +31,7 @@ public class ProductDTO {
     private Long mobileNo;
     private Integer userId;
     private String userType;
+    private byte[] photo;
 
     /**
      * Convert Product entity to ProductDTO including seller user details
@@ -54,7 +55,8 @@ public class ProductDTO {
                 user.getEmail(),
                 user.getMobileNo(),
                 user.getUserId(),
-                user.getUserType().toString()
+                user.getUserType().toString(),
+                product.getPhoto()
         );
     }
 
@@ -69,6 +71,7 @@ public class ProductDTO {
                 productDTO.getCost(),
                 productDTO.getDiscount(),
                 productDTO.isActive(),
+                productDTO.getPhoto(),
                 seller,
                 category,
                 null,
