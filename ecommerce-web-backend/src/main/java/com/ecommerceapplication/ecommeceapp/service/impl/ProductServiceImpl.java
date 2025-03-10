@@ -2,6 +2,7 @@ package com.ecommerceapplication.ecommeceapp.service.impl;
 
 import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
 import com.ecommerceapplication.ecommeceapp.dto.ProductInventoryDTO;
+import com.ecommerceapplication.ecommeceapp.dto.SpecificationDTO;
 import com.ecommerceapplication.ecommeceapp.entity.*;
 import com.ecommerceapplication.ecommeceapp.exception.CustomException;
 import com.ecommerceapplication.ecommeceapp.exception.ResourceNotFoundException;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -176,6 +178,19 @@ public class ProductServiceImpl implements ProductService {
         return products.stream()
                 .map(ProductInventoryDTO::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Product addSpecification(Integer productId, SpecificationDTO request) {
+        Product product = productRepo.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+
+        if (product.getSpecifications() == null) {
+            product.setSpecifications(new HashMap<>());
+        }
+
+        product.getSpecifications().put(request.getSpecName(), request.getSpecValue());
+        return productRepo.save(product);
     }
 
 }

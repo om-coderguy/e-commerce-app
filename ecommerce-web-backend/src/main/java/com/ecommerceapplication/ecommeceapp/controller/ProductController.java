@@ -3,6 +3,7 @@ package com.ecommerceapplication.ecommeceapp.controller;
 import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
 import com.ecommerceapplication.ecommeceapp.dto.ProductInventoryDTO;
 import com.ecommerceapplication.ecommeceapp.dto.RecentProductDTO;
+import com.ecommerceapplication.ecommeceapp.dto.SpecificationDTO;
 import com.ecommerceapplication.ecommeceapp.entity.*;
 import com.ecommerceapplication.ecommeceapp.repository.RecentProductRepository;
 import com.ecommerceapplication.ecommeceapp.repository.UserRepository;
@@ -294,6 +295,18 @@ public class ProductController {
         } catch (Exception ex) {
             LOGGER.error("Error while fetching products: {}", ex.getMessage());
             return new ResponseEntity<>("Internal Server Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/{productId}/specifications")
+    public ResponseEntity<?> addSpecification(
+            @PathVariable Integer productId,
+            @RequestBody SpecificationDTO request) {
+        try {
+            Product updatedProduct = productService.addSpecification(productId, request);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

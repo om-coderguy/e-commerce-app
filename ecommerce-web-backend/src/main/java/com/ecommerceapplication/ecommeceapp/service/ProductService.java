@@ -2,6 +2,7 @@ package com.ecommerceapplication.ecommeceapp.service;
 import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
 import com.ecommerceapplication.ecommeceapp.dto.ProductInventoryDTO;
 import com.ecommerceapplication.ecommeceapp.dto.RecentProductDTO;
+import com.ecommerceapplication.ecommeceapp.dto.SpecificationDTO;
 import com.ecommerceapplication.ecommeceapp.entity.Order;
 import com.ecommerceapplication.ecommeceapp.entity.Product;
 
@@ -27,6 +28,8 @@ public interface ProductService {
      List<Product> getSimilarProducts(int productId);
 
      List<ProductInventoryDTO> getProductsInventoryBySellerUserId(Integer userId);
+
+     Product addSpecification(Integer productId, SpecificationDTO request);
 
 //     ProductDTO updateProduct(Integer productId, ProductDTO productDTO);+
 }

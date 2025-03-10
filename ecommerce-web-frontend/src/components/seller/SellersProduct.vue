@@ -88,6 +88,14 @@
                       label="Category"
                     ></v-text-field> -->
                     </v-col>
+                    <v-col cols="12">
+                      <v-file-input
+                        v-model="editedItem.photo"
+                        label="Upload Product Image"
+                        accept="image/*"
+                        show-size
+                      ></v-file-input>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -247,6 +255,7 @@ export default {
       discount: 0,
       categoryId: 0,
       specifications: {},
+      photo: null,
     },
 
     editedSpec: {
@@ -314,6 +323,7 @@ export default {
     this.auth = JSON.parse(localStorage.getItem("auth"));
     console.log(this.auth);
     this.getAllProducts(this.auth.userId);
+    this.allCates();
   },
 
   methods: {
@@ -335,8 +345,8 @@ export default {
 
     addSpec() {
       axios
-        .put(urls().products + "/specs", {
-          productId: this.editedItem.id,
+        .post(urls().products + "/" + this.editedItem.id + "/specifications", {
+          // productId: this.editedItem.id,
           specName: this.editedSpec.key,
           specValue: this.editedSpec.value,
         })
@@ -400,30 +410,28 @@ export default {
     },
 
     save(productId) {
+      const formData = new FormData();
+      formData.append("name", this.editedItem.name);
+      formData.append("descr", this.editedItem.descr);
+      formData.append("cost", this.editedItem.cost);
+      formData.append("discount", this.editedItem.discount);
+      formData.append("categoryId", this.editedItem.categoryId);
+      formData.append("active", true);
+      if (this.editedItem.photo) {
+        formData.append("photo", this.editedItem.photo);
+      }
       if (this.editedIndex > -1) {
         axios
-          .put(urls().products + "/" + productId, {
-            name: this.editedItem.name,
-            descr: this.editedItem.descr,
-            cost: this.editedItem.cost,
-            discount: this.editedItem.discount,
-            categoryId: this.editedItem.categoryId,
-          })
+          .put(urls().products + "/" + productId, 
+            formData
+          )
           .then((response) => {
             console.log(response.data);
           });
         Object.assign(this.allProducts[this.editedIndex], this.editedItem);
       } else {
         axios
-          .post(urls().products, {
-            name: this.editedItem.name,
-            descr: this.editedItem.descr,
-            cost: this.editedItem.cost,
-            discount: this.editedItem.discount,
-            active: true,
-            sellerId: this.auth.sellerId,
-            categoryId: this.editedItem.categoryId,
-          })
+          .post(urls().products, formData)
           .then((response) => {
             console.log(response.data);
           });
@@ -436,6 +444,12 @@ export default {
       axios.get(urls().products + "/seller/" + value, {}).then((response) => {
         this.allProducts = response.data;
         console.log(this.allProducts);
+      });
+    },
+    async allCates() {
+      await axios.get(urls().categories, {}).then((response) => {
+        this.categories = response.data;
+        console.log(this.category);
       });
     },
   },
