@@ -1,7 +1,6 @@
 package com.ecommerceapplication.ecommeceapp.controller;
 
 import com.ecommerceapplication.ecommeceapp.dto.CategoryDTO;
-import com.ecommerceapplication.ecommeceapp.dto.ProductDTO;
 import com.ecommerceapplication.ecommeceapp.entity.Category;
 import com.ecommerceapplication.ecommeceapp.service.CategoryService;
 import org.slf4j.Logger;

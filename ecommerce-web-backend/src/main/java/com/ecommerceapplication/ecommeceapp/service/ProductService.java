@@ -32,5 +32,4 @@ public interface ProductService {
      Product addSpecification(Integer productId, SpecificationDTO request);
 
      ProductDTO processRecentProduct(RecentProductDTO recentProductDTO);
-//     ProductDTO updateProduct(Integer productId, ProductDTO productDTO);+
 }

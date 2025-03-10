@@ -30,23 +30,18 @@ public class InventoryController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping()
-    public ResponseEntity<?> saveinventory(@RequestBody InventoryDTO inventoryDTO ) {
-        LOGGER.info("Received request to save  the inventory");
-        try {
-            Product product=productService.getByProductId(inventoryDTO.getProductId());
-            Inventory inventory=InventoryDTO.toInventory(inventoryDTO,product);
-            inventory=inventoryService.saveInventory(inventory);
-            product.setInventory(inventory);
-            productService.updateProduct(ProductDTO.toDTO(product), inventoryDTO.getProductId());
-            inventoryDTO=InventoryDTO.toDTO(inventory);
-            LOGGER.info("Request for inventory Successful");
 
-            return new ResponseEntity<>(inventoryDTO, HttpStatus.OK);
-        }
-        catch (Exception ex) {
-            LOGGER.error("Unable to process request to save inventory \n"+ ex.getMessage());
-            return new ResponseEntity<>("Enable to save the inventory" + ex, HttpStatus.BAD_REQUEST);
+    @PostMapping
+    public ResponseEntity<?> saveInventory(@RequestBody InventoryDTO inventoryDTO) {
+        LOGGER.info("Received request to save the inventory");
+
+        try {
+            InventoryDTO savedInventory = inventoryService.saveInventory(inventoryDTO);
+            LOGGER.info("Request for inventory successful");
+            return new ResponseEntity<>(savedInventory, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Unable to process request to save inventory: {}", ex.getMessage());
+            return new ResponseEntity<>("Unable to save the inventory: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
