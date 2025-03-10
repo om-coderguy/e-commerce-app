@@ -24,20 +24,21 @@
           <v-carousel hide-delimiters height="250">
             <!-- Grouping 4 products per carousel item -->
             <v-carousel-item
-              v-for="(chunk, index) in Math.ceil(topProducts.length / 4)"
+              v-for="(chunk, index) in topProducts && topProducts.length
+                ? Math.ceil(topProducts.length / 4)
+                : 0"
               :key="index"
-              style="height: 100%;"
             >
-              <v-layout style="height: 100%;">
+              <v-layout style="height: 100%">
                 <v-flex
-                  v-for="item in topProducts.slice(index * 4, index * 4 + 4)"
+                  v-for="item in topProducts?.slice(index * 4, index * 4 + 4)"
                   :key="item.name"
                   xs3
                   class="green lighten-4 text-center pb-3 pt-3 mx-2 d-flex align-center"
                   @click="showProductDetails(item.id)"
                 >
                   <!-- Dummy Image on the Left -->
-                  <div style="width: 150px; margin: 10px;">
+                  <div style="width: 150px; margin: 10px">
                     <v-img
                       :src="
                         product?.image || require('@/assets/DefaultProduct.png')
@@ -101,19 +102,21 @@
           <v-carousel hide-delimiters height="250">
             <!-- Grouping 4 products per carousel item -->
             <v-carousel-item
-              v-for="(chunk, index) in Math.ceil(allProducts.length / 4)"
-              :key="index" style="height: 100%;"
+              v-for="(chunk, index) in allProducts?.length
+                ? Math.ceil(allProducts.length / 4)
+                : 0"
+              :key="index"
             >
-              <v-layout style="height: 100%;">
+              <v-layout style="height: 100%">
                 <v-flex
-                  v-for="item in allProducts.slice(index * 4, index * 4 + 4)"
+                  v-for="item in allProducts?.slice(index * 4, index * 4 + 4)"
                   :key="item.name"
                   xs3
                   class="green lighten-4 text-center pb-3 pt-3 mx-2 d-flex align-center"
                   @click="showProductDetails(item.id)"
                 >
                   <!-- Dummy Image on the Left -->
-                  <div style="width: 150px; margin: 10px;">
+                  <div style="width: 150px; margin: 10px">
                     <v-img
                       :src="
                         product?.image || require('@/assets/DefaultProduct.png')
@@ -177,19 +180,24 @@
           <v-carousel hide-delimiters height="250">
             <!-- Grouping 4 products per carousel item -->
             <v-carousel-item
-              v-for="(chunk, index) in Math.ceil(recentProducts.length / 4)"
-              :key="index" style="height: 100%;"
+              v-for="(chunk, index) in recentProducts?.length
+                ? Math.ceil(recentProducts.length / 4)
+                : 0"
+              :key="index"
             >
-              <v-layout style="height: 100%;">
+              <v-layout style="height: 100%">
                 <v-flex
-                  v-for="item in recentProducts.slice(index * 4, index * 4 + 4)"
+                  v-for="item in recentProducts?.slice(
+                    index * 4,
+                    index * 4 + 4
+                  )"
                   :key="item.name"
                   xs3
                   class="green lighten-4 text-center pb-3 pt-3 mx-2 d-flex align-center"
                   @click="showProductDetails(item.id)"
                 >
                   <!-- Dummy Image on the Left -->
-                  <div style="width: 150px; margin: 10px;">
+                  <div style="width: 150px; margin: 10px">
                     <v-img
                       :src="
                         product?.image || require('@/assets/DefaultProduct.png')
@@ -261,9 +269,9 @@ export default {
   data() {
     return {
       auth: JSON.parse(localStorage.getItem("auth")),
-      allProducts: this.allProducts1(),
-      topProducts: this.topProducts1(),
-      recentProducts: this.recentProducts1(),
+      allProducts: [],
+      topProducts: [],
+      recentProducts: [],
       multiLine: false,
       snackbar: {
         value: false,
@@ -284,7 +292,11 @@ export default {
   name: "DashBoard",
   components: {},
   computed: {},
-  created() {},
+  created() {
+    this.allProducts1();
+    this.topProducts1();
+    this.recentProducts1();
+  },
   methods: {
     async allProducts1() {
       console.log("Hello Iam inside");
@@ -336,10 +348,13 @@ export default {
             productId: value,
           })
           .then((response) => {
-            console.log(response);
-            this.snackbar.message = response.data;
+            if(response.status===200){
+              this.snackbar.message = "Product added to cart successfully";
             this.snackbar.color = "green";
             this.snackbar.value = true;
+            }
+            console.log(response);
+           
           });
       }
     },
@@ -354,5 +369,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
