@@ -2,10 +2,12 @@ package com.ecommerceapplication.ecommeceapp.dto;
 
 import com.ecommerceapplication.ecommeceapp.constant.UserType;
 import com.ecommerceapplication.ecommeceapp.entity.Seller;
+import com.ecommerceapplication.ecommeceapp.entity.SubUser;
 import com.ecommerceapplication.ecommeceapp.entity.User;
 import lombok.*;
 
-import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -24,8 +26,16 @@ public class SellerDTO {
     private String password;
     private Long mobileNo;
 
+    // Add a list of subusers
+    private List<SubUserDTO> subUsers;
+
     // Converts Seller entity to SellerDTO
     public static SellerDTO toDTO(Seller seller) {
+        // Map the list of subusers as well
+        List<SubUserDTO> subUserDTOs = seller.getSubUsers().stream()
+                .map(SubUserDTO::toDTO)  // Assuming you have a toDTO method in SubUserDTO
+                .collect(Collectors.toList());
+
         return new SellerDTO(
                 seller.getSellerId(),
                 seller.getUser().getUserId(),
@@ -34,7 +44,8 @@ public class SellerDTO {
                 seller.getUser().getName(),
                 seller.getUser().getUserName(),
                 seller.getUser().getPassword(),
-                seller.getUser().getMobileNo()
+                seller.getUser().getMobileNo(),
+                subUserDTOs  // Add the list of SubUserDTOs here
         );
     }
 

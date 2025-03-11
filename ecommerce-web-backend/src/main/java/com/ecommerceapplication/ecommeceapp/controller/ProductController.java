@@ -47,7 +47,7 @@ public class ProductController {
     @Autowired
     private UserRepository userRepo;
 
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<?> addProduct(@RequestBody ProductDTO productDTO) {
         LOGGER.info("Received request to save product");
 

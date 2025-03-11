@@ -1,5 +1,6 @@
 package com.ecommerceapplication.ecommeceapp.entity;
 
+import com.ecommerceapplication.ecommeceapp.constant.UserType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,5 +29,15 @@ public class Seller {
 
     @Column(name = "gst_in")
     private String gstIn;
+
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubUser> subUsers;
+
+    public Seller(User user, Integer sellerId, String companyName, String gstIn) {
+        this.user=user;
+        this.sellerId=sellerId;
+        this.companyName=companyName;
+        this.gstIn=gstIn;
+    }
 
 }
