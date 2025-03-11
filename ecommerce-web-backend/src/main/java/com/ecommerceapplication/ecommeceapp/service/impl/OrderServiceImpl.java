@@ -8,7 +8,6 @@ import com.ecommerceapplication.ecommeceapp.entity.User;
 import com.ecommerceapplication.ecommeceapp.exception.CustomException;
 import com.ecommerceapplication.ecommeceapp.exception.ResourceNotFoundException;
 import com.ecommerceapplication.ecommeceapp.repository.UserRepository;
-import com.ecommerceapplication.ecommeceapp.service.NotificationService;
 import com.ecommerceapplication.ecommeceapp.repository.OrderRepository;
 import com.ecommerceapplication.ecommeceapp.service.OrderService;
 import com.ecommerceapplication.ecommeceapp.service.ProductService;
@@ -37,9 +36,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private NotificationService notificationService;
 
     @Autowired
     private UserRepository userRepository;
@@ -99,8 +95,8 @@ public class OrderServiceImpl implements OrderService {
             product.getInventory().setTotalQuantity(quantity - order.getQuantity());
             orderRepo.save(order);
             LOGGER.info("Order Placed successfully by Id - " + order.getOrderId());
-            if (order.getUser().getEmail() != null && order.getUser().getMobileNo() != null)
-                notificationService.send("Order placed Successfully", order.getUser().getMobileNo(), order.getUser().getEmail());
+//            if (order.getUser().getEmail() != null && order.getUser().getMobileNo() != null)
+//                notificationService.send("Order placed Successfully", order.getUser().getMobileNo(), order.getUser().getEmail());
             orderDTO = OrderDTO.toDTO(order);
             return orderDTO;
         } catch (ResourceNotFoundException ex) {
