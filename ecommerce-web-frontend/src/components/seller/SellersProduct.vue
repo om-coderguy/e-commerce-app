@@ -26,7 +26,7 @@
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-              color="green lighten-3"
+              color="primary"
               class="mb-2"
               v-bind="attrs"
               v-on="on"
@@ -262,12 +262,14 @@ export default {
       value: "",
     },
     defaultItem: {
+      id: 0,
       name: "",
       descr: "",
       cost: 0,
       discount: 0,
       categoryId: 0,
       specifications: {},
+      photo: null,
     },
     rules: {
       required: (value) => !!value || "Required.",

@@ -282,8 +282,12 @@ export default {
       return this.auth.name[0];
     },
     menuItems: function () {
-      if (this.auth?.userType == "SELLER"||this.auth?.userType == "SUPER_USER" || this.auth?.userType == "DELIVERY")
-        return this.items.filter(
+      if (
+        this.auth?.userType == "SELLER" ||
+        this.auth?.userType == "SUPER_USER" ||
+        this.auth?.userType == "DELIVERY"
+      )
+        return this.items?.filter(
           (item) => item.id !== "regSeller" && item.id !== "orders"
         );
       return this.items;
@@ -398,12 +402,21 @@ export default {
           console.log(response.data);
           localStorage.setItem("auth", JSON.stringify(response.data));
           this.auth = JSON.parse(localStorage.getItem("auth"));
+
           this.dialog = false;
           this.snackbar.message = "LogIn successful";
           this.snackbar.color = "green";
           this.snackbar.value = true;
-          window.location.reload(true);
-          console.log(this.auth);
+          if (
+            this.auth.userType === "SELLER" ||
+            this.auth.userType === "SUPER_USER"
+          ) {
+            this.$router.push("/seller");
+          }
+           else if (this.auth.userType === "DELIVERY") {
+            this.$router.push("/delivery"); // Default route
+          }
+          else this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);
