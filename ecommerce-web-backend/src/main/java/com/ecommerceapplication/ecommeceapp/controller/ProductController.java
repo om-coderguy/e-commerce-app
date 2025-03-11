@@ -71,7 +71,7 @@ public class ProductController {
             Product existingProduct = productService.getByProductId(productId);
             if (existingProduct == null) {
                 LOGGER.warn("Product with ID {} not found", productId);
-                return new ResponseEntity<>("Product not found with ID: " + productId, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Product not found with ID: " + productId, HttpStatus.NO_CONTENT);
             }
 
             // Update the product
@@ -187,7 +187,7 @@ public class ProductController {
             List<ProductDTO> products = productService.getProductsBySellerUserId(userId);
 
             if (products.isEmpty()) {
-                return new ResponseEntity<>("No products found for sellers userId: " + userId, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("No products found for sellers userId: " + userId, HttpStatus.NO_CONTENT);
             }
 
             return new ResponseEntity<>(products, HttpStatus.OK);
@@ -221,7 +221,7 @@ public class ProductController {
         try {
             List<ProductInventoryDTO> products = productService.getProductsInventoryBySellerUserId(userId);
             if (products.isEmpty()) {
-                return new ResponseEntity<>("No products found for seller with userId: " + userId, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("No products found for seller with userId: " + userId, HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(products, HttpStatus.OK);
         } catch (Exception ex) {

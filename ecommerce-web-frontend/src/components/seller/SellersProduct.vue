@@ -10,7 +10,6 @@
         v-model="snackbar.value"
         class="snackbar pt-13"
         style="justify-content: right; align-items: flex-start"
-        :multi-line="multiLine"
         :color="snackbar.color"
       >
         <span class="snackbar-msg">{{ snackbar.message }}</span>

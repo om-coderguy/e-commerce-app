@@ -9,6 +9,7 @@ export default () => {
       categories: "http://localhost:8080/api/categories",
       orders: "http://localhost:8080/api/orders",
       inventory:"http://localhost:8080/api/inventories",
+      subUser:"http://localhost:8080/api/subusers",
       // topProducts: 'http://localhost:8080/api/products/top',
       // recentProducts :'http://localhost:8080/api/products/recent',
       // singleProduct: 'http://localhost:8080/api/products/byId',

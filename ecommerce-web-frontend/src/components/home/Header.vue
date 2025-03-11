@@ -282,7 +282,7 @@ export default {
       return this.auth.name[0];
     },
     menuItems: function () {
-      if (this.auth?.userType == "SELLER" || this.auth?.userType == "DELIVERY")
+      if (this.auth?.userType == "SELLER"||this.auth?.userType == "SUPER_USER" || this.auth?.userType == "DELIVERY")
         return this.items.filter(
           (item) => item.id !== "regSeller" && item.id !== "orders"
         );
@@ -303,6 +303,9 @@ export default {
           this.$router.push("/");
           break;
         case "SELLER":
+          this.$router.push("/seller");
+          break;
+        case "SUPER_USER":
           this.$router.push("/seller");
           break;
         case "DELIVERY":

@@ -12,5 +12,5 @@ public interface SubUserService {
 
     ResponseEntity<String> deleteSubUser(Integer subUserId);
 
-    ResponseEntity<List<SubUserDTO>> getAllSubUsers();
+    ResponseEntity<List<SubUserDTO>> getSubUsersBySellerUserId(Integer userId);
 }

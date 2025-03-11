@@ -51,7 +51,7 @@ public class SellerServiceImpl implements SellerService {
         LOGGER.info("Trying to save the data to database\n");
         try{
             User user=userService.getUserById(seller.getUser().getUserId());
-            user.setUserType(UserType.SELLER);
+            user.setUserType(UserType.SUPER_USER);
             sellerRepo.save(seller);
             LOGGER.info("Saved seller successfully\n");
 //            userService.updateUser(user,userSellerDTO.getUserId());
@@ -69,15 +69,13 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public Map<String, Object> registerSeller(SellerDTO sellerDTO) {
-        // Step 1: Create and save the User entity
         User user = createUserFromDTO(sellerDTO);
+        user.setUserType(UserType.SUPER_USER);
         user = userService.saveUser(user);
 
-        // Step 2: Create and save the Seller entity
         Seller seller = SellerDTO.toSeller(sellerDTO, user);
         seller = sellerRepo.save(seller);
 
-        // Step 3: Prepare response map
         return prepareResponse(seller);
     }
 
@@ -86,9 +84,9 @@ public class SellerServiceImpl implements SellerService {
         User user = new User();
         user.setUserName(sellerDTO.getUserName());
         user.setPassword(sellerDTO.getPassword());
-        user.setName(sellerDTO.getOwnerName()); // Ensure correct field name
+        user.setName(sellerDTO.getOwnerName());
         user.setMobileNo(sellerDTO.getMobileNo());
-        user.setUserType(UserType.SELLER);
+        user.setUserType(UserType.SUPER_USER);
         return user;
     }
 

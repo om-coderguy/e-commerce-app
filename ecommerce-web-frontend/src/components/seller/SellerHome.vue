@@ -20,10 +20,20 @@
     >
       My Orders
     </v-btn>
+
+    <v-btn
+      text
+      class="green lighten-3 outlined ma-2"
+      @click="openPage('subuser')"
+      v-if="this.auth.userType=='SUPER_USER'"
+    >
+      My Staff
+    </v-btn>
     <div class="main-box">
       <ManageInventory  v-if="pageName == 'manageInventory'"/>
       <SellersProduct v-if="pageName == 'products'" />
       <SellerOrders v-if="pageName=='orders'" />
+      <SellerSubUsers v-if="pageName=='subuser'" />
     </div>
   </div>
 </template>
@@ -32,15 +42,21 @@
 import ManageInventory from './ManageInventory.vue';
 import SellerOrders from './SellerOrders.vue';
 import SellersProduct from './SellersProduct.vue'
+import SellerSubUsers from './SellerSubUsers.vue';
 
 export default {
   data: () => ({
     pageName: "products",    
+    auth: null,
   }),
   components:{
     SellersProduct,
     SellerOrders,
-    ManageInventory
+    ManageInventory,
+    SellerSubUsers
+  },
+  created() {
+    this.auth = JSON.parse(localStorage.getItem("auth"));
   },
   methods: {
     openPage(value) {

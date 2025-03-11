@@ -10,6 +10,8 @@ import com.ecommerceapplication.ecommeceapp.repository.SellerRepository;
 import com.ecommerceapplication.ecommeceapp.repository.SubUserRepository;
 import com.ecommerceapplication.ecommeceapp.repository.UserRepository;
 import com.ecommerceapplication.ecommeceapp.service.SubUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +25,14 @@ import java.util.stream.Collectors;
 @Service
 public class SubUserServiceImpl implements SubUserService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubUserServiceImpl.class);
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private SellerRepository sellerRepository;
+
     @Autowired
     private SubUserRepository subUserRepository;
 
@@ -34,8 +40,9 @@ public class SubUserServiceImpl implements SubUserService {
     @Transactional
     public ResponseEntity<String> createSubUser(SubUserDTO request) {
         try {
-            Seller seller = sellerRepository.findById(request.getSellerId())
-                    .orElseThrow(() -> new EntityNotFoundException("Seller not found"));
+            LOGGER.info("Creating sub-user for seller ID: {}", request.getSellerId());
+
+            Seller seller = sellerRepository.findByUser_UserId(request.getSellerId());
 
             User user = new User();
             user.setUserName(request.getUsername());
@@ -48,11 +55,13 @@ public class SubUserServiceImpl implements SubUserService {
             SubUser subUser = new SubUser();
             subUser.setSeller(seller);
             subUser.setUser(user);
-            subUser.setRole(SubRole.MANAGER);
+            subUser.setRole(SubRole.valueOf(request.getRole()));
             subUserRepository.save(subUser);
 
+            LOGGER.info("Sub-user created successfully under Seller ID: {}", seller.getSellerId());
             return ResponseEntity.status(HttpStatus.CREATED).body("SubUser created successfully with ADMIN role under Seller ID: " + seller.getSellerId());
         } catch (Exception e) {
+            LOGGER.error("Failed to create sub-user: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to create SubUser: " + e.getMessage());
         }
     }
@@ -61,6 +70,8 @@ public class SubUserServiceImpl implements SubUserService {
     @Transactional
     public ResponseEntity<String> updateSubUser(Integer subUserId, SubUserDTO request) {
         try {
+            LOGGER.info("Updating sub-user with ID: {}", subUserId);
+
             SubUser subUser = subUserRepository.findById(subUserId)
                     .orElseThrow(() -> new EntityNotFoundException("SubUser not found"));
 
@@ -71,17 +82,20 @@ public class SubUserServiceImpl implements SubUserService {
             }
 
             if (request.getFullName() != null) {
-                user.setName(request.getFullName()); // Encrypt in real use
+                user.setName(request.getFullName());
             }
+
             if (request.getPassword() != null) {
-                user.setPassword(request.getPassword()); // Encrypt in real use
+                user.setPassword(request.getPassword());
             }
 
             userRepository.save(user);
             subUserRepository.save(subUser);
 
+            LOGGER.info("Sub-user updated successfully with ID: {}", subUserId);
             return ResponseEntity.ok("SubUser updated successfully");
         } catch (Exception e) {
+            LOGGER.error("Failed to update sub-user: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to update SubUser: " + e.getMessage());
         }
     }
@@ -90,39 +104,58 @@ public class SubUserServiceImpl implements SubUserService {
     @Transactional
     public ResponseEntity<String> deleteSubUser(Integer subUserId) {
         try {
+            LOGGER.info("Deleting sub-user with ID: {}", subUserId);
+
             SubUser subUser = subUserRepository.findById(subUserId)
                     .orElseThrow(() -> new EntityNotFoundException("SubUser not found"));
 
             subUserRepository.delete(subUser);
             userRepository.deleteById(subUser.getUser().getUserId());
 
+            LOGGER.info("Sub-user deleted successfully with ID: {}", subUserId);
             return ResponseEntity.ok("SubUser deleted successfully");
         } catch (Exception e) {
+            LOGGER.error("Failed to delete sub-user: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to delete SubUser: " + e.getMessage());
         }
     }
 
     @Override
-    public ResponseEntity<List<SubUserDTO>> getAllSubUsers() {
-        List<SubUser> subUsers = subUserRepository.findAll();
+    public ResponseEntity<List<SubUserDTO>> getSubUsersBySellerUserId(Integer userId) {
+        try {
+            LOGGER.info("Fetching sub-users for seller with userId: {}", userId);
 
-        if (subUsers.isEmpty()) {
-            throw new EntityNotFoundException("No subusers found.");
+            Seller seller = sellerRepository.findByUser_UserId(userId);
+            if (seller == null) {
+                throw new EntityNotFoundException("Seller not found with userId: " + userId);
+            }
+
+            List<SubUser> subUsers = subUserRepository.findBySeller(seller);
+
+            if (subUsers.isEmpty()) {
+                LOGGER.warn("No sub-users found for seller with userId: {}", userId);
+                throw new EntityNotFoundException("No sub-users found for seller ID: " + userId);
+            }
+
+            List<SubUserDTO> subUserDTOs = subUsers.stream()
+                    .map(this::mapToSubUserDTO)
+                    .collect(Collectors.toList());
+
+            LOGGER.info("Successfully fetched {} sub-users for seller with userId: {}", subUserDTOs.size(), userId);
+            return ResponseEntity.ok(subUserDTOs);
+        } catch (Exception e) {
+            LOGGER.error("Failed to fetch sub-users: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to fetch sub-users: " + e.getMessage());
         }
-
-        List<SubUserDTO> subUserDTOs = subUsers.stream()
-                .map(subUser -> {
-                    SubUserDTO subUserDTO = new SubUserDTO();
-                    subUserDTO.setSellerId(subUser.getSeller().getSellerId());
-                    subUserDTO.setUsername(subUser.getUser().getUserName());
-                    subUserDTO.setFullName(subUser.getUser().getName());
-                    subUserDTO.setSellerId(subUserDTO.getSellerId());
-                    // Add other fields as needed
-                    return subUserDTO;
-                })
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(subUserDTOs);
     }
 
+    private SubUserDTO mapToSubUserDTO(SubUser subUser) {
+        SubUserDTO subUserDTO = new SubUserDTO();
+        subUserDTO.setSubUserId(subUser.getId());
+        subUserDTO.setSellerId(subUser.getSeller().getSellerId());
+        subUserDTO.setUsername(subUser.getUser().getUserName());
+        subUserDTO.setFullName(subUser.getUser().getName());
+        subUserDTO.setRole(subUser.getRole().toString());
+        return subUserDTO;
+    }
 }

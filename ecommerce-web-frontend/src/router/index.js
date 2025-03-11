@@ -8,8 +8,8 @@ import RegisterSeller from '../components/seller/RegisterSeller.vue'
 import RegisterDelivery from '../components/delivery/RegisterDelivery.vue'
 import DeliveryHome from '../components/delivery/DeliveryHome.vue'
 import BuyProduct from '../components/site-user/BuyProduct.vue'
-import Unauthorized from '@/components/home/Unauthorized.vue'
 import ProductDetails from '@/components/site-user/ProductDetails.vue'
+import Unauthorized from '@/components/home/Unauthorized.vue'
 
 
 Vue.use(Router)
@@ -19,6 +19,7 @@ const UserTypes = {
   SITE_USER: 'SITE_USER',
   SELLER: 'SELLER',
   DELIVERY: 'DELIVERY',
+  SUPER_USER: 'SUPER_USER',
 };
 
 // Helper function to get user details from auth token
@@ -27,6 +28,10 @@ function getUser() {
   console.log("Token: ", token);
   
   if (!token) return null; // If no token, return null
+  
+        // if (user.userType==UserTypes.SUPER_USER){ 
+      //   return next('/seller'); // Redirect if not authorized
+      // }
 
   try {
     // Parse the JSON directly without Base64 decoding
@@ -70,7 +75,7 @@ const router = new Router({
       path: '/seller',
       name: 'Seller',
       component: SellerHome,
-      meta: { requiresAuth: true, allowedRoles: [UserTypes.SELLER] },
+      meta: { requiresAuth: true, allowedRoles: [UserTypes.SUPER_USER] },
     },
     {
       path: '/delivery',
@@ -109,8 +114,6 @@ const router = new Router({
 
   router.beforeEach((to, from, next) => {
     const user = getUser();
-    console.log(user);
-    
   
     // Check if the route requires authentication
     if (to.meta.requiresAuth) {

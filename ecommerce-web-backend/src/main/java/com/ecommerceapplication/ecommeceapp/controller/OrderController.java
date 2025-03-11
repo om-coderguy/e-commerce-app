@@ -100,6 +100,7 @@ public class OrderController {
     public ResponseEntity<String> deleteOrder(@PathVariable Integer orderId) {
         try {
             orderService.deleteOrderById(orderId);
+            LOGGER.info("Deleted order for Order ID: {}", orderId);
             return ResponseEntity.ok("Order deleted successfully!");
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

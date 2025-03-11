@@ -66,7 +66,7 @@ public class SellerDTO {
                 this.ownerName,
                 this.password,
                 this.ownerName,
-                UserType.SELLER, // Assuming UserType enum has a SELLER value
+                UserType.SUPER_USER, // Assuming UserType enum has a SELLER value
                 this.userName,
                 this.mobileNo
         );
