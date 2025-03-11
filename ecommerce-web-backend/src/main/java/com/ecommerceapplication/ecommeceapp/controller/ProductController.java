@@ -272,7 +272,7 @@ public class ProductController {
     }
 
     // Get all reviews for a product
-    @GetMapping("/{productId}/reviews")
+    @GetMapping("/reviews/{productId}")
     public ResponseEntity<List<ReviewDTO>> getProductReviews(@PathVariable Integer productId) {
         try {
             List<ReviewDTO> reviews = productService.getReviewsByProductId(productId);
