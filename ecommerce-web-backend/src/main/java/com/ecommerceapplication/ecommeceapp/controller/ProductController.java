@@ -118,6 +118,19 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/{productId}")
+    public ResponseEntity<?> getProductByproductId(@PathVariable Integer productId) {
+        try {
+            Product product = productService.getByProductId(productId);
+            ProductDTO productDTO=ProductDTO.toDTO(product);
+            LOGGER.info("Request for product Successful " + productId);
+            return new ResponseEntity<>(productDTO, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Request for product Unsuccessful " + productId + "\n Exception = " + ex.getMessage());
+            return new ResponseEntity<>("Unable to fetch the product for Id - " + productId + " Exception: " + ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/top")
     public ResponseEntity<?> getTopProducts() {
         LOGGER.info("Received request to get top products");

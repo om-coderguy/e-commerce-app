@@ -8,6 +8,7 @@
           color="red"
           class="like-button"
           @click="toggleLike"
+          v-if="isAuthenticated"
         >
           <v-icon>{{ isLiked ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
@@ -46,7 +47,7 @@
       </v-card>
   
       <!-- Review Submission Form -->
-      <v-card class="ma-5 pa-5" max-width="680" width="680" outlined>
+      <v-card class="ma-5 pa-5" max-width="680" width="680" outlined v-if="isAuthenticated">
         <v-form @submit.prevent="submitReview">
           <v-text-field
             v-model="newReview"
@@ -98,6 +99,9 @@
       discountedPrice() {
         return this.product.cost - (this.product.cost * this.product.discount) / 100;
       },
+      isAuthenticated() {
+        return this.auth !== null;
+      }
     },
   
     created() {
@@ -142,6 +146,14 @@
           axios.post(`${urls().products}/byid`, {
             productId: productId,
             userId: this.auth.userId,
+          }).then((response) => {
+            this.product = response.data;
+          });
+        }
+        else {
+          axios.get(`${urls().products}/${productId}`, {
+            productId: productId,
+            userId: null,
           }).then((response) => {
             this.product = response.data;
           });

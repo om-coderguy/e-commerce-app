@@ -432,9 +432,6 @@ export default {
           }
         });
     },
-    changeDrawer() {
-      this.$router.push("/nav");
-    },
   },
   watch: {},
 };
