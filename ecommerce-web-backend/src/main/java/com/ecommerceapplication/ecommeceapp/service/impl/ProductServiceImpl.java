@@ -307,7 +307,8 @@ public class ProductServiceImpl implements ProductService {
         return reviews.stream().map(review -> {
             ReviewDTO reviewDTO = new ReviewDTO();
             reviewDTO.setId(review.getId());              // Review ID
-            reviewDTO.setUserName(review.getUser().getName()); // User's Name
+            reviewDTO.setUserName(review.getUser().getUserName()); // UserName
+            reviewDTO.setReviewerName(review.getUser().getName());
             reviewDTO.setRating(review.getRating());      // Rating
             reviewDTO.setComment(review.getComment());    // Comment
             return reviewDTO;

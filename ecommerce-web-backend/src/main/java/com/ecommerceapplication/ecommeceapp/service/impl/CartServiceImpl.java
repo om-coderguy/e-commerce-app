@@ -23,7 +23,6 @@ public class CartServiceImpl implements CartService {
 
     static final Logger LOGGER= LoggerFactory.getLogger(CartService.class);
 
-
     @Autowired
     private CartRepository cartRepo;
 
@@ -32,8 +31,6 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private ProductService productService;
-
-
 
 
     @Override
