@@ -9,8 +9,14 @@ import com.ecommerceapplication.ecommeceapp.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,20 +63,27 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Map<String, Object> addProduct(ProductDTO productDTO) {
-        Seller seller = sellerService.getSellerById(productDTO.getSellerId());
+        Seller seller = sellerRepository.findByUser_UserId(productDTO.getUserId());
         if (seller == null) {
-            throw new RuntimeException("Seller not found with ID: " + productDTO.getSellerId());
+            throw new RuntimeException("Seller not found with user ID: " + productDTO.getUserId());
         }
         Category category = categoryService.getCategoryById(productDTO.getCategoryId());
         if (category == null) {
             throw new RuntimeException("Category not found with ID: " + productDTO.getCategoryId());
         }
+
         Product product = ProductDTO.toEntity(productDTO, seller, category);
+
         product = productRepo.save(product);
 
         return prepareProductResponse(product);
     }
 
+
+
+
+
+    //    This is response for saving product
     private Map<String, Object> prepareProductResponse(Product product) {
         return Map.of(
                 "productId", product.getId(),
@@ -83,35 +96,6 @@ public class ProductServiceImpl implements ProductService {
                 "categoryId", product.getCategory().getCatId()
         );
     }
-
-//    @Override
-//    public Product saveProduct(ProductDTO productDTO) {
-//        Product product = new Product();
-//        try {
-//            Seller seller = sellerService.getSellerById(productDTO.getSellerId());
-//            User user = userService.getUserById(seller.getUser().getUserId());
-//            if(!user.isSeller()) {
-//                throw new CustomException("Only seller can Save and Update product");
-//            }
-//            Category category = categoryService.getCategoryById(productDTO.getCategoryId());
-//            product.setActive(productDTO.isActive());
-//            product.setSeller(seller);
-//            product.setCost(productDTO.getCost());
-//            product.setDiscount(productDTO.getDiscount());
-//            product.setDescr(productDTO.getDescr());
-//            product.setName(productDTO.getName());
-//            product.setCategory(category);
-//            product = productRepo.save(product);
-//        }
-//        catch (ResourceNotFoundException ex){
-//            throw ex;
-//        }
-//        catch (Exception ex){
-//            throw  new CustomException("Unhandled Error while saving product \n Exception = ",ex);
-//        }
-//
-//        return product;
-//    }
 
     @Override
     public Product updateProduct(ProductDTO productDTO, int productId) {

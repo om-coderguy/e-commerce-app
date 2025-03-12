@@ -44,7 +44,7 @@
                         <v-text-field v-model="editedItem.fullName" :rules="[rules.required]" label="Name"></v-text-field>
                       </v-col>
                       <v-col cols="12">
-                          <v-select v-model="editedItem.subRole" :rules="[rules.required]" :items="roles" label="Sub Role"></v-select>
+                          <v-select v-model="editedItem.role" :rules="[rules.required]" :items="roles" label="Sub Role"></v-select>
                         </v-col>
                         <v-col cols="12">
                           <v-text-field v-model="editedItem.username" :rules="[rules.required]" label="Username"></v-text-field>
@@ -113,7 +113,7 @@
         editedItem: {
           fullName: "",
           username: "",
-          subRole: "",
+          role: "",
           password: "",
           subUserId: "",
         },
@@ -121,7 +121,7 @@
         defaultItem: {
           fullName: "",
           username: "",
-          subRole: "",
+          role: "",
           password: "",
           subUserId: "",
         },

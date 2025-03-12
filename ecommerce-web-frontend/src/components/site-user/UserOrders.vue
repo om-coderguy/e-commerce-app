@@ -1,5 +1,18 @@
 <template>
     <div class="all-products d-flex flex-wrap">
+      <v-snackbar
+        v-model="snackbar.value"
+        class="snackbar pt-13"
+        style="justify-content: right; align-items: flex-start"
+        :color="snackbar.color"
+      >
+        <span class="snackbar-msg">{{ snackbar.message }}</span>
+        <template v-slot:action="{ attrs }">
+          <v-btn text v-bind="attrs" @click="snackbar.value = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
       <v-card
         class="ma-5 blue lighten-4"
         max-width="280"
@@ -42,6 +55,11 @@ export default {
   data: () => ({
     orders: [],
     auth: [],
+    snackbar: {
+      value: false,
+      message: "",
+      color: "",
+    },
   }),
 
   created() {
@@ -68,6 +86,9 @@ export default {
         .then((response) => {
           this.orders.splice(index, 1);
           console.log(response.data);
+          this.snackbar.message = "Order deleted successfully";
+          this.snackbar.color = "red";
+          this.snackbar.value = true;
         })
         .catch((error) => {
           console.log(error);

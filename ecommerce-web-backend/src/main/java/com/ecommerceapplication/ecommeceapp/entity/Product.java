@@ -39,7 +39,7 @@ public class Product {
 
     @Lob
     @Column(name = "photo", columnDefinition = "LONGBLOB")
-    private byte[] photo;
+    private String photo;
 
 
     @ManyToOne

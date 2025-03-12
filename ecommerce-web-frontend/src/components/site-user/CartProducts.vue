@@ -1,5 +1,18 @@
 <template>
   <div class="show-products d-flex">
+    <v-snackbar
+          v-model="snackbar.value"
+          class="snackbar pt-13"
+          style="justify-content: right; align-items: flex-start"
+          :color="snackbar.color"
+        >
+          <span class="snackbar-msg">{{ snackbar.message }}</span>
+          <template v-slot:action="{ attrs }">
+            <v-btn text v-bind="attrs" @click="snackbar.value = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
     <div class="all-products">
       <v-card
         class="ma-5 green lighten-4"
@@ -60,6 +73,11 @@ export default {
   data: () => ({
     products: [],
     auth: [],
+    snackbar: {
+      value: false,
+      message: "",
+      color: "",
+    }
   }),
 
   created() {
@@ -102,12 +120,22 @@ export default {
             quantity: 1,
             userId: this.auth.userId,
             productId: product.id,
+
           })
           .then((response) => {
             this.deleteFromCart(product.id,index)
             this.products.splice(index,1)
             console.log(response.data);
-          });
+            this.snackbar.message = "Order placed successfully";
+            this.snackbar.color = "green";
+            this.snackbar.value = true;
+          }).catch((error) => {
+            if (error.response.status) {
+              this.snackbar.message = error.response.data;
+              this.snackbar.color = "red";
+              this.snackbar.value = true;
+            }
+          })
       });
     },
     productInCart() {
@@ -133,6 +161,9 @@ export default {
         .then((response) => {
           this.products.splice(index, 1);
           console.log(response.data);
+          this.snackbar.message = "Removed from cart successfully";
+          this.snackbar.color = "red";
+          this.snackbar.value = true;
         })
         .catch((error) => {
           console.log(error);

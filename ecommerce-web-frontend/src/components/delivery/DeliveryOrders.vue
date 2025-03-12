@@ -6,6 +6,19 @@
     class="elevation-1 ma-8"
   >
     <template v-slot:top>
+      <v-snackbar
+        v-model="snackbar.value"
+        class="snackbar pt-13"
+        style="justify-content: right; align-items: flex-start"
+        :color="snackbar.color"
+      >
+        <span class="snackbar-msg">{{ snackbar.message }}</span>
+        <template v-slot:action="{ attrs }">
+          <v-btn text v-bind="attrs" @click="snackbar.value = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
       <v-toolbar flat>
         <v-toolbar-title>My Deliveries</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
@@ -28,7 +41,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    
+
                     <v-col cols="12" sm="6" md="4">
                       <v-select
                         :rules="[rules.required]"
@@ -54,7 +67,12 @@
                 <v-btn color="blue darken-1" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="blue darken-1" text type="submit" :disabled="!productInfo">
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  type="submit"
+                  :disabled="!productInfo"
+                >
                   Save
                 </v-btn>
               </v-card-actions>
@@ -100,7 +118,7 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
-    productInfo:null,
+    productInfo: null,
     headers: [
       {
         text: "Order ID",
@@ -120,14 +138,14 @@ export default {
       productName: "",
       productDesc: "",
       totalCost: 0,
-      deliveryId:0,
+      deliveryId: 0,
     },
     defaultItem: {
       orderId: "",
       status: "",
       productName: "",
       productDesc: "",
-      deliveryId:0,
+      deliveryId: 0,
       totalCost: 0,
     },
     status: [
@@ -153,10 +171,14 @@ export default {
     },
     allOrders: [],
     auth: [],
+    snackbar: {
+        value: false,
+        message: "",
+        color: "",
+      },
   }),
 
-  computed: {
-  },
+  computed: {},
 
   watch: {
     dialog(val) {
@@ -202,13 +224,21 @@ export default {
 
     deleteItemConfirm() {
       axios
-        .delete(urls().orders+"/"+this.editedIndex, {})
+        .delete(urls().orders + "/" + this.editedIndex, {})
         .then((response) => {
-            this.allOrders.splice(this.editedIndex, 1);
+          this.allOrders.splice(this.editedIndex, 1);
           console.log(response.data);
+          this.snackbar.message = "Order deleted successfully";
+          this.snackbar.color = "red";
+          this.snackbar.value = true;
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.status) {
+            this.snackbar.message = error.response.data;
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
+          }
         });
       this.closeDelete();
     },
@@ -228,26 +258,37 @@ export default {
     },
 
     save() {
-        const status=this.editedItem.status;
-        axios.put(urls().orders+"/order-status", {
-            deliveryId:this.auth.userId,  
-            orderId:this.editedItem.orderId,
-            status:this.editedItem.status 
-        }).then((response) => {
-            console.log(response.data);        
-            this.allOrders[this.editedIndex].status= status;
-
-      });
-        this.close();
+      const status = this.editedItem.status;
+      axios
+        .put(urls().orders + "/order-status", {
+          deliveryId: this.auth.userId,
+          orderId: this.editedItem.orderId,
+          status: this.editedItem.status,
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.allOrders[this.editedIndex].status = status;
+          this.snackbar.message = "Status updated successfully";
+          this.snackbar.color = "green";
+          this.snackbar.value = true;
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response.status) {
+            this.snackbar.message = error.response.data;
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
+          }
+        });
+      this.close();
     },
-    
+
     getAllOrders(value) {
       axios.get(urls().orders + "/delivery/" + value, {}).then((response) => {
         this.allOrders = response.data;
         console.log(this.allOrders);
       });
     },
-
   },
 };
 </script>

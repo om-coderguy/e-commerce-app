@@ -15,7 +15,7 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <v-row class="pt-3 pl-3" style="width: 100%;">
+    <v-row class="pt-3 pl-3" style="width: 100%">
       <v-card
         class="ma-3 green lighten-4"
         max-width="350"
@@ -28,7 +28,11 @@
           <v-list-item>
             <v-list-item-avatar size="100">
               <v-img
-                :src="product.image || require('@/assets/DefaultProduct.png')"
+                :src="
+                  product?.photo
+                    ? product.photo
+                    : require('@/assets/DefaultProduct.png')
+                "
                 alt="Product Image"
               ></v-img>
             </v-list-item-avatar>
@@ -124,7 +128,7 @@ export default {
 </script>
 
 <style>
-.v-data-table-header tr > th{
+.v-data-table-header tr > th {
   font-size: 16px !important;
   font-weight: bold;
   color: #411085 !important;

@@ -6,6 +6,19 @@
     class="elevation-1 ma-8"
   >
     <template v-slot:top>
+      <v-snackbar
+        v-model="snackbar.value"
+        class="snackbar pt-13"
+        style="justify-content: right; align-items: flex-start"
+        :color="snackbar.color"
+      >
+        <span class="snackbar-msg">{{ snackbar.message }}</span>
+        <template v-slot:action="{ attrs }">
+          <v-btn text v-bind="attrs" @click="snackbar.value = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
       <v-toolbar flat>
         <v-toolbar-title class="text-h5">My Inventory</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
@@ -33,6 +46,7 @@
                         v-model="editedItem.totalQuantity"
                         :rules="[rules.required]"
                         label="Total Quantity"
+                        type="number"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -105,6 +119,11 @@ export default {
     },
     allProducts: [],
     auth: [],
+    snackbar: {
+      value: false,
+      message: "",
+      color: "",
+    },
   }),
 
   computed: {},
@@ -152,18 +171,20 @@ export default {
       });
     },
 
-
     save(value) {
-        axios
-          .post(urls().inventory , {
-            productId: value,
-            totalQuantity: this.editedItem.totalQuantity,
-          })
-          .then((response) => {
-            console.log(response.data);
-          });
-        Object.assign(this.allProducts[this.editedIndex], this.editedItem);
-        this.close();
+      axios
+        .post(urls().inventory, {
+          productId: value,
+          totalQuantity: this.editedItem.totalQuantity,
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.snackbar.message = "Product updated successfully";
+          this.snackbar.color = "green";
+          this.snackbar.value = true;
+        });
+      Object.assign(this.allProducts[this.editedIndex], this.editedItem);
+      this.close();
     },
 
     getAllProducts(value) {

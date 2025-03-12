@@ -29,11 +29,6 @@
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <!-- x -->
-
-      <!-- <v-btn class="ma-2" color="secondary" @click="changeDrawer">
-        Nav drawer
-      </v-btn> -->
 
       <v-btn
         v-if="isUser"
@@ -51,7 +46,6 @@
             <v-avatar color="primary" size="40" v-bind="attrs" v-on="on">
               <span class="white-text">{{ getName }}</span>
             </v-avatar>
-            <!-- <v-btn color="primary" dark v-bind="attrs" v-on="on"> Dropdown </v-btn> -->
           </template>
 
           <v-list>
@@ -362,6 +356,7 @@ export default {
           this.auth = JSON.parse(localStorage.getItem("auth"));
           this.snackbar.message = "Logout successful";
           this.snackbar.color = "blue";
+          this.snackbar.value = true;
           console.log(this.$route.name);
           if (this.$route.name !== null) this.$router.push("/");
           window.location.reload(true);
@@ -381,6 +376,9 @@ export default {
           localStorage.setItem("auth", JSON.stringify(response.data));
           this.auth = JSON.parse(localStorage.getItem("auth"));
           this.$router.reload();
+          this.snackbar.message = "Registration successful";
+          this.snackbar.color = "green";
+          this.snackbar.value = true;
         })
         .catch((error) => {
           console.log(error);
@@ -412,11 +410,9 @@ export default {
             this.auth.userType === "SUPER_USER"
           ) {
             this.$router.push("/seller");
-          }
-           else if (this.auth.userType === "DELIVERY") {
+          } else if (this.auth.userType === "DELIVERY") {
             this.$router.push("/delivery"); // Default route
-          }
-          else this.$router.push("/");
+          } else this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);

@@ -6,6 +6,19 @@
     class="elevation-1 ma-8"
   >
     <template v-slot:top>
+      <v-snackbar
+        v-model="snackbar.value"
+        class="snackbar pt-13"
+        style="justify-content: right; align-items: flex-start"
+        :color="snackbar.color"
+      >
+        <span class="snackbar-msg">{{ snackbar.message }}</span>
+        <template v-slot:action="{ attrs }">
+          <v-btn text v-bind="attrs" @click="snackbar.value = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
       <v-toolbar flat>
         <v-toolbar-title class="text-h5 ">My Orders</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
@@ -155,6 +168,12 @@ export default {
     },
     allOrders: [],
     auth: [],
+    editedIndex: -1,
+    snackbar: {
+      value: false,
+      color: "",
+      message: "",
+    }
   }),
 
   computed: {},
@@ -208,9 +227,17 @@ export default {
         .then((response) => {
           this.allOrders.splice(this.editedIndex, 1);
           console.log(response.data);
+          this.snackbar.message = "Order deleted successfully";
+          this.snackbar.color = "red";
+          this.snackbar.value = true;
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.status) {
+            this.snackbar.message = error.response.data;
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
+          }
         });
       this.closeDelete();
     },
@@ -244,6 +271,9 @@ export default {
           );
           this.allOrders[this.editedIndex].deliveryName =
             this.deliveryUsers[tempId].name;
+          this.snackbar.message = "Delivery man updated successfully";
+          this.snackbar.color = "green";
+          this.snackbar.value = true;
         });
       this.close();
     },

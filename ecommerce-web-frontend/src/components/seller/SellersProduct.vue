@@ -20,17 +20,12 @@
         </template>
       </v-snackbar>
       <v-toolbar flat>
-        <v-toolbar-title class="text-h5 ">My Products</v-toolbar-title>
+        <v-toolbar-title class="text-h5">My Products</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              class="mb-2"
-              v-bind="attrs"
-              v-on="on"
-            >
+            <v-btn color="primary" class="mb-2" v-bind="attrs" v-on="on">
               Add Product
             </v-btn>
           </template>
@@ -62,6 +57,7 @@
                         v-model="editedItem.cost"
                         :rules="[rules.required]"
                         label="Cost"
+                        type="number"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
@@ -69,6 +65,7 @@
                         v-model="editedItem.discount"
                         :rules="[rules.required]"
                         label="Discount"
+                        type="number"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
@@ -87,14 +84,14 @@
                       label="Category"
                     ></v-text-field> -->
                     </v-col>
-                    <v-col cols="12">
+                    <!-- <v-col cols="12">
                       <v-file-input
                         v-model="editedItem.photo"
                         label="Upload Product Image"
                         accept="image/*"
                         show-size
                       ></v-file-input>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -250,11 +247,11 @@ export default {
       id: 0,
       name: "",
       descr: "",
-      cost: 0,
-      discount: 0,
-      categoryId: 0,
+      cost: "",
+      discount: "",
+      categoryId: "",
       specifications: {},
-      photo: null,
+      // photo: null,
     },
 
     editedSpec: {
@@ -361,6 +358,18 @@ export default {
             this.editedItem.specifications,
             newSpec
           );
+          this.dialogSpec = false;
+          this.snackbar.message = "Specification added successfully";
+          this.snackbar.color = "green";
+          this.snackbar.value = true;
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response.status) {
+            this.snackbar.message = error.response.data;
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
+          }
         });
     },
 
@@ -389,6 +398,11 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.status) {
+            this.snackbar.message = error.response.data;
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
+          }
         });
 
       this.closeDelete();
@@ -411,33 +425,54 @@ export default {
     },
 
     save(productId) {
-      const formData = new FormData();
-      formData.append("name", this.editedItem.name);
-      formData.append("descr", this.editedItem.descr);
-      formData.append("cost", this.editedItem.cost);
-      formData.append("discount", this.editedItem.discount);
-      formData.append("categoryId", this.editedItem.categoryId);
-      formData.append("active", true);
-      if (this.editedItem.photo) {
-        formData.append("photo", this.editedItem.photo);
-      }
+      const randomImageUrl = `https://picsum.photos/500/500?random=${Date.now()}`;
+
+      const productData = {
+        name: this.editedItem.name,
+        descr: this.editedItem.descr,
+        cost: this.editedItem.cost,
+        discount: this.editedItem.discount,
+        categoryId: this.editedItem.categoryId,
+        userId: this.auth.userId,
+        sellerId: this.auth.sellerId,
+        photo: randomImageUrl,
+        active: true,
+      };
+
       if (this.editedIndex > -1) {
         axios
-          .put(urls().products + "/" + productId, 
-            formData
-          )
+          .put(`${urls().products}/${productId}`, productData)
           .then((response) => {
             console.log(response.data);
+            Object.assign(this.allProducts[this.editedIndex], this.editedItem);
+            this.snackbar.message = "Product updated successfully";
+            this.snackbar.color = "green";
+            this.snackbar.value = true;
+          })
+          .catch((error) => {
+            console.error("Error updating product:", error);
+            this.snackbar.message = "Error updating product";
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
           });
-        Object.assign(this.allProducts[this.editedIndex], this.editedItem);
       } else {
         axios
-          .post(urls().products, formData)
+          .post(urls().products, productData)
           .then((response) => {
             console.log(response.data);
+            this.allProducts.push(this.editedItem);
+            this.snackbar.message = "Product added successfully";
+            this.snackbar.color = "green";
+            this.snackbar.value = true;
+          })
+          .catch((error) => {
+            console.error("Error creating product:", error);
+            this.snackbar.message = "Error creating product";
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
           });
-        this.allProducts.push(this.editedItem);
       }
+
       this.close();
     },
 
