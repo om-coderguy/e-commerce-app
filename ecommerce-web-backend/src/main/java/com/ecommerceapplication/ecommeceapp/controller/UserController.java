@@ -30,6 +30,7 @@ public class UserController {
         User user;
         try {
             user = UserDTO.toUser(userDTO);
+            user.setUserType(UserType.SITE_USER);
             user=userService.saveUser(user);
             LOGGER.info("User saved successfully");
         } catch (Exception ex) {
