@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user){
         LOGGER.info("Trying to save the user in database\n");
         try {
-            user.setUserType(UserType.SITE_USER);
             return usersRepo.save(user);
         }
         catch(Exception ex){
