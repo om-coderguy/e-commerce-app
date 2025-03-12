@@ -121,7 +121,7 @@ public class SubUserServiceImpl implements SubUserService {
     }
 
     @Override
-    public ResponseEntity<List<SubUserDTO>> getSubUsersBySellerUserId(Integer userId) {
+    public ResponseEntity<?> getSubUsersBySellerUserId(Integer userId) {
         try {
             LOGGER.info("Fetching sub-users for seller with userId: {}", userId);
 
@@ -134,7 +134,7 @@ public class SubUserServiceImpl implements SubUserService {
 
             if (subUsers.isEmpty()) {
                 LOGGER.warn("No sub-users found for seller with userId: {}", userId);
-                throw new EntityNotFoundException("No sub-users found for seller ID: " + userId);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No sub-users found for seller with userId: {}");
             }
 
             List<SubUserDTO> subUserDTOs = subUsers.stream()

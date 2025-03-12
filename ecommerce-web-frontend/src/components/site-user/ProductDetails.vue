@@ -129,7 +129,7 @@
           }).then(() => {
             // Add the new review to the list
             this.reviews.push({
-              author: "You",
+              author: this.auth.name,
               content: this.newReview,
             });
             this.newReview = "";
@@ -150,11 +150,11 @@
   
       fetchReviews(productId) {
         // Fetch dummy reviews from a dummy API
-        axios.post(urls().products+"/"+productId + "/reviews", {})
+        axios.get(urls().products+"/reviews/"+productId, {})
           .then((response) => {
             // Map the dummy data to match the review structure
             this.reviews = response.data.map((item) => ({
-              author: item.userName,
+              author: item.reviewerName,
               content: item.comment,
             }));
           });

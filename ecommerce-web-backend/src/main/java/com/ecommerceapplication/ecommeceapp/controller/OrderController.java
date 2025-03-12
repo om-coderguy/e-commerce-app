@@ -73,7 +73,7 @@ public class OrderController {
         try {
             List<OrderDTO> orders = orderService.getOrdersBySellerUserId(userId);
             if (orders.isEmpty()) {
-                return new ResponseEntity<>("No orders found for seller with userId: " + userId, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("No orders found for seller with userId: " + userId, HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception ex) {

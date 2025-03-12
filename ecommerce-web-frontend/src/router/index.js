@@ -75,7 +75,7 @@ const router = new Router({
       path: '/seller',
       name: 'Seller',
       component: SellerHome,
-      meta: { requiresAuth: true, allowedRoles: [UserTypes.SUPER_USER] },
+      meta: { requiresAuth: true, allowedRoles: [UserTypes.SUPER_USER, UserTypes.SELLER] },
     },
     {
       path: '/delivery',

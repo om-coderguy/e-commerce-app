@@ -14,4 +14,6 @@ public class ReviewDTO {
     private int rating;
     private String comment;
     private String userName;
+    private String reviewerName;
+
 }
