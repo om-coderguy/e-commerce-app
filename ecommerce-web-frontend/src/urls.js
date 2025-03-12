@@ -1,5 +1,5 @@
 export default () => {
-  if (window.location.href.indexOf("localhost:8081") > -1) {
+  if (window.location.href.indexOf("localhost:8083") > -1) {
     return {
       login: "http://localhost:8080/login",
       registerUser: "http://localhost:8080/api/users",
