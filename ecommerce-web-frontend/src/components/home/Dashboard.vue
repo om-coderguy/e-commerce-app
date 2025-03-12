@@ -79,13 +79,13 @@
 
                     <!-- Action Buttons -->
                     <v-btn
-                      class="mb-2"
-                      color="red lighten-3"
+                      class="my-2"
+                      color="red lighten-3 custom-btn"
                       @click.stop="buyNow(item.id)"
                       >Buy Now</v-btn
                     ><br />
                     <v-btn
-                      color="orange lighten-2"
+                      color="orange lighten-2 custom-btn"
                       @click.stop="addToCart(item.id)"
                       >Add To Cart</v-btn
                     >
@@ -157,13 +157,13 @@
 
                     <!-- Action Buttons -->
                     <v-btn
-                      class="mb-2"
-                      color="red lighten-3"
+                      class="my-2"
+                      color="red lighten-3 custom-btn"
                       @click.stop="buyNow(item.id)"
                       >Buy Now</v-btn
                     ><br />
                     <v-btn
-                      color="orange lighten-2"
+                      color="orange lighten-2 custom-btn"
                       @click.stop="addToCart(item.id)"
                       >Add To Cart</v-btn
                     >
@@ -238,13 +238,13 @@
 
                     <!-- Action Buttons -->
                     <v-btn
-                      class="mb-2"
-                      color="red lighten-3"
+                      class="my-2"
+                      color="red lighten-3 custom-btn"
                       @click.stop="buyNow(item.id)"
                       >Buy Now</v-btn
                     ><br />
                     <v-btn
-                      color="orange lighten-2"
+                      color="orange lighten-2 custom-btn"
                       @click.stop="addToCart(item.id)"
                       >Add To Cart</v-btn
                     >
@@ -369,4 +369,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.custom-btn {
+  width: 120px;
+}
+</style>

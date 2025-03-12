@@ -57,7 +57,7 @@ const router = new Router({
       path: '/category/:id',
       name: 'Categories',
       component: CategoryContent,
-      meta: { requiresAuth: true, allowedRoles: [UserTypes.SITE_USER] },
+      meta: { requiresAuth: false, allowedRoles: [UserTypes.SITE_USER] },
     },
     {
       path: '/cart',
