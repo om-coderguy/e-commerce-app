@@ -112,23 +112,29 @@ const router = new Router({
   ]
 });
 
-  router.beforeEach((to, from, next) => {
-    const user = getUser();
-  
-    // Check if the route requires authentication
-    if (to.meta.requiresAuth) {
-      if (!user) {
-        return next('/'); // Redirect to login if not authenticated
-      }
-  
-      // Check if the user's role is allowed
-      if (!to.meta.allowedRoles.includes(user.userType)) {
-        return next('/unauthorized'); // Redirect if not authorized
-      }
+router.beforeEach((to, from, next) => {
+  const user = getUser();
+
+  // If user is a seller or super_user, always redirect to /seller
+  if (user && (user.userType === UserTypes.SELLER || user.userType === UserTypes.SUPER_USER)) {
+    if (to.path !== '/seller') {
+      return next('/seller');
     }
-  
-    next(); // Proceed to the route
-  
-})
+  }
+
+  // Check if the route requires authentication
+  if (to.meta.requiresAuth) {
+    if (!user) {
+      return next('/'); // Redirect to login if not authenticated
+    }
+
+    // Check if the user's role is allowed
+    if (!to.meta.allowedRoles.includes(user.userType)) {
+      return next('/unauthorized'); // Redirect if not authorized
+    }
+  }
+
+  next(); // Proceed to the route
+});
 
 export default router;

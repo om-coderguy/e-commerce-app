@@ -40,9 +40,7 @@
                   <!-- Dummy Image on the Left -->
                   <div style="width: 150px; margin: 10px">
                     <v-img
-                      :src="
-                        product?.image || require('@/assets/DefaultProduct.png')
-                      "
+                      :src="item?.photo ? item.photo : require('@/assets/DefaultProduct.png')"
                       alt="Product Image"
                     ></v-img>
                   </div>
@@ -118,9 +116,7 @@
                   <!-- Dummy Image on the Left -->
                   <div style="width: 150px; margin: 10px">
                     <v-img
-                      :src="
-                        product?.image || require('@/assets/DefaultProduct.png')
-                      "
+                      :src="item?.photo ? item.photo : require('@/assets/DefaultProduct.png')"
                       alt="Product Image"
                     ></v-img>
                   </div>
@@ -199,9 +195,7 @@
                   <!-- Dummy Image on the Left -->
                   <div style="width: 150px; margin: 10px">
                     <v-img
-                      :src="
-                        product?.image || require('@/assets/DefaultProduct.png')
-                      "
+                      :src="item?.photo ? item.photo : require('@/assets/DefaultProduct.png')"
                       alt="Product Image"
                     ></v-img>
                   </div>

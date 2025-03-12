@@ -31,7 +31,7 @@ public class ProductDTO {
     private Long mobileNo;
     private Integer userId;
     private String userType;
-    private byte[] photo;
+    private String photo;
 
     /**
      * Convert Product entity to ProductDTO including seller user details

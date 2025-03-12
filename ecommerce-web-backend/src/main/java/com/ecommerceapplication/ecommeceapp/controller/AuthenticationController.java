@@ -30,7 +30,7 @@ public class AuthenticationController {
         try {
             User user = userRepo.findOneByUserName(loginRequest.getUsername());
             if (user == null) {
-                throw new ResourceNotFoundException("User not found for username - " + loginRequest.getUsername());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No User Found");
             }
             if (user.getPassword().equals(loginRequest.getPassword())) {
                 UserDTO userDTO = UserDTO.toDTO(user);

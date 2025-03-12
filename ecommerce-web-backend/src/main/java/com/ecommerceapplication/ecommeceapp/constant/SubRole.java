@@ -1,7 +1,7 @@
 package com.ecommerceapplication.ecommeceapp.constant;
 
 public enum SubRole {
+    ADMIN,
     MANAGER,
-    SALES_REPRESENTATIVE,
-    SUPPORT_AGENT
+    OPERATOR
 }

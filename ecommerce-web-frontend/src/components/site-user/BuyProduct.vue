@@ -1,5 +1,18 @@
 <template>
   <div class="show-products d-flex">
+    <v-snackbar
+          v-model="snackbar.value"
+          class="snackbar pt-13"
+          style="justify-content: right; align-items: flex-start"
+          :color="snackbar.color"
+        >
+          <span class="snackbar-msg">{{ snackbar.message }}</span>
+          <template v-slot:action="{ attrs }">
+            <v-btn text v-bind="attrs" @click="snackbar.value = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
     <div class="product">
       <v-card class="ma-5 green lighten-4" max-width="680" width="680" outlined>
         <v-list-item three-line>
@@ -40,6 +53,11 @@ export default {
   data: () => ({
     product: {},
     auth: [],
+    snackbar: {
+      value: false,
+      message: "",
+      color: "",  
+    }
   }),
 
   created() {
@@ -63,12 +81,21 @@ export default {
         .post(urls().orders, {
           quantity: 1,
           userId: this.auth.userId,
-          productId: this.product.id,
+          productId: this.product.id,        
         })
         .then((response) => {
           this.$router.push("/");
           console.log(response.data);
-        });
+          this.snackbar.message = "Order placed successfully";
+          this.snackbar.color = "green";
+          this.snackbar.value = true;
+        }).catch((error) => {
+          if (error.response.status) {
+            this.snackbar.message = error.response.data;
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
+          }
+        })
     },
 
     productsById(value) {
@@ -82,6 +109,12 @@ export default {
         .then((response) => {
           this.product = response.data;
           console.log(this.product);
+        }).catch((error) => {
+          if (error.response.status) {
+            this.snackbar.message = error.response.data;
+            this.snackbar.color = "red";
+            this.snackbar.value = true;
+          }
         });
       }
       else{

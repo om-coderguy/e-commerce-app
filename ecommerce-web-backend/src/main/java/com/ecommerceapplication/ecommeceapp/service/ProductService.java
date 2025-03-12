@@ -9,6 +9,7 @@ import java.util.Map;
 public interface ProductService {
 
      Map<String, Object> addProduct(ProductDTO productDTO);
+
      List<Product> getAllProducts();
 
      Product getByProductId(int productId);
