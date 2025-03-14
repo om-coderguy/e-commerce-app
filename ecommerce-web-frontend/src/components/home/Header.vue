@@ -61,7 +61,12 @@
       </div>
 
       <div v-else class="text-center">
-        <v-dialog v-model="dialog" width="500">
+        <!-- <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on"> -->
+        <!-- <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+          LOG IN or SIGN UP
+        </v-btn> -->
+
+        <!-- <v-dialog v-model="dialog" width="500">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
               LOG IN or SIGN UP
@@ -177,7 +182,15 @@
               </v-dialog>
             </div>
           </v-card>
-        </v-dialog>
+        </v-dialog> -->
+        
+        <Login
+          :mode="authMode"
+          :buttonText="authMode === 'login' ? 'LOG IN' : 'SIGN UP'"
+          buttonColor="red lighten-3"
+          @toggleMode="toggleAuthMode"
+          @authSuccess="onAuthSuccess"
+        />
       </div>
 
       <v-dialog v-model="sellerDialog" width="500">
@@ -221,12 +234,14 @@
 <script>
 import urls from "../../urls";
 import axios from "axios";
+import Login from "./Login.vue";
 
 export default {
   name: "HeaderEcom",
-  components: {},
+  components: { Login },
   data: () => ({
     auth: [],
+    authMode: "login",
     dialog: false,
     dialog1: false,
     sellerDialog: false,
@@ -427,6 +442,15 @@ export default {
             this.snackbar.value = true;
           }
         });
+    },
+
+    toggleAuthMode() {
+      this.authMode = this.authMode === "login" ? "signup" : "login";
+    },
+    onAuthSuccess(userData) {
+      console.log("User authenticated:", userData);
+      // this.$router.push(userData.userType === "SELLER" ? "/seller" : "/");
+      window.location.reload(true);
     },
   },
   watch: {},
