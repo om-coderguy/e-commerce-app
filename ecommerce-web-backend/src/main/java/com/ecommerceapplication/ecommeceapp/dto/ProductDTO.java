@@ -22,6 +22,7 @@ public class ProductDTO {
     private boolean active;
     private Integer sellerId;
     private Integer categoryId;
+    private String categoryName;
     private Map<String, String> specifications;
 
     // Seller User Info
@@ -50,6 +51,7 @@ public class ProductDTO {
                 product.isActive(),
                 seller.getSellerId(),
                 product.getCategory().getCatId(),
+                product.getCategory().getCatName(),
                 product.getSpecifications(),
                 user.getUserName(),
                 user.getPassword(),
@@ -75,6 +77,7 @@ public class ProductDTO {
                 product.isActive(),
                 seller.getSellerId(),
                 product.getCategory().getCatId(),
+                product.getCategory().getCatName(),
                 product.getSpecifications(),
                 user.getUserName(),
                 user.getPassword(),

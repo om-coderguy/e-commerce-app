@@ -239,7 +239,7 @@ export default {
       { text: "Description", value: "descr" },
       { text: "Cost", value: "cost" },
       { text: "Discount", value: "discount" },
-      { text: "Category", value: "categoryId" },
+      { text: "Category", value: "categoryName" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     editedIndex: -1,
@@ -460,7 +460,7 @@ export default {
           .post(urls().products, productData)
           .then((response) => {
             console.log(response.data);
-            this.allProducts.push(this.editedItem);
+            this.allProducts.push(response.data);
             this.snackbar.message = "Product added successfully";
             this.snackbar.color = "green";
             this.snackbar.value = true;
