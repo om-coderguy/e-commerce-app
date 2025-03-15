@@ -300,5 +300,16 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/liked/{userId}")
+    public ResponseEntity<List<ProductDTO>> getLikedProducts(@PathVariable Integer userId) {
+        try{
+            List<ProductDTO> likedProducts = productService.getLikedProducts(userId);
+            return ResponseEntity.ok(likedProducts);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

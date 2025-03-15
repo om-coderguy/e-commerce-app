@@ -39,4 +39,6 @@ public interface ProductService {
      String saveReview(ReviewDTO reviewDTO);
 
      List<ReviewDTO> getReviewsByProductId(Integer productId);
+
+     List<ProductDTO> getLikedProducts(Integer userId);
 }

@@ -24,10 +24,12 @@
         <div>
           <v-img
             :src="
-              product?.photo ? product.photo : require('@/assets/DefaultProduct.png')
+              product?.photo
+                ? product.photo
+                : require('@/assets/DefaultProduct.png')
             "
             alt="Product Image"
-            style="width: 200px; height: 200px;"
+            style="width: 200px; height: 200px"
           ></v-img>
         </div>
         <v-list-item-content class="ml-10">
@@ -58,6 +60,8 @@
       outlined
       v-if="isAuthenticated"
     >
+      <h3 class="mb-3">Reviews</h3>
+
       <v-form @submit.prevent="submitReview">
         <v-text-field
           v-model="newReview"
@@ -178,6 +182,7 @@ export default {
           })
           .then((response) => {
             this.product = response.data;
+            this.isLiked = this.product.liked || false;
           });
       } else {
         axios

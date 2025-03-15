@@ -38,15 +38,19 @@
                   @click="showProductDetails(item.id)"
                 >
                   <!-- Dummy Image on the Left -->
-                  <div style="width: 150px; margin: 10px">
+                  <div  class="col-md-6 col-sm-6 col-12">
                     <v-img
-                      :src="item?.photo ? item.photo : require('@/assets/DefaultProduct.png')"
+                      :src="
+                        item?.photo
+                          ? item.photo
+                          : require('@/assets/DefaultProduct.png')
+                      "
                       alt="Product Image"
                     ></v-img>
                   </div>
 
                   <!-- Product Details -->
-                  <div class="text-left">
+                  <div class="text-left col-md-6 col-sm-6 col-12" >
                     <strong>{{ item.name }}</strong
                     ><br />
                     {{ item.descr }}<br />
@@ -76,17 +80,39 @@
                     ><br />
 
                     <!-- Action Buttons -->
-                    <v-btn
-                      class="my-2"
-                      color="red lighten-3 custom-btn"
-                      @click.stop="buyNow(item.id)"
-                      >Buy Now</v-btn
-                    ><br />
-                    <v-btn
-                      color="orange lighten-2 custom-btn"
-                      @click.stop="addToCart(item.id)"
-                      >Add To Cart</v-btn
-                    >
+                    <div v-if="auth !== null">
+                      <v-btn
+                        class="my-2"
+                        color="red lighten-3 custom-btn"
+                        @click.stop="buyNow(item.id)"
+                        >Buy Now</v-btn
+                      ><br />
+                      <v-btn
+                        color="orange lighten-3 custom-btn"
+                        @click.stop="addToCart(item.id)"
+                        >Add To Cart</v-btn
+                      >
+                    </div>
+                    <div v-else>
+                      <div class="my-2">
+                        <Login
+                          :mode="authMode"
+                          buttonColor="red lighten-3 custom-btn"
+                          buttonText="Buy Now"
+                          @toggleMode="toggleAuthMode"
+                          @authSuccess="onAuthSuccess"
+                        />
+                      </div>
+                      <div>
+                        <Login
+                          :mode="authMode"
+                          buttonColor="orange lighten-3 custom-btn"
+                          buttonText="Add To Cart"
+                          @toggleMode="toggleAuthMode"
+                          @authSuccess="onAuthSuccess"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </v-flex>
               </v-layout>
@@ -114,15 +140,19 @@
                   @click="showProductDetails(item.id)"
                 >
                   <!-- Dummy Image on the Left -->
-                  <div style="width: 150px; margin: 10px">
+                  <div  class="col-md-6 col-sm-6 col-12">
                     <v-img
-                      :src="item?.photo ? item.photo : require('@/assets/DefaultProduct.png')"
+                      :src="
+                        item?.photo
+                          ? item.photo
+                          : require('@/assets/DefaultProduct.png')
+                      "
                       alt="Product Image"
                     ></v-img>
                   </div>
 
                   <!-- Product Details -->
-                  <div class="text-left">
+                  <div class="text-left col-md-6 col-sm-6 col-12">
                     <strong>{{ item.name }}</strong
                     ><br />
                     {{ item.descr }}<br />
@@ -152,17 +182,39 @@
                     ><br />
 
                     <!-- Action Buttons -->
-                    <v-btn
-                      class="my-2"
-                      color="red lighten-3 custom-btn"
-                      @click.stop="buyNow(item.id)"
-                      >Buy Now</v-btn
-                    ><br />
-                    <v-btn
-                      color="orange lighten-2 custom-btn"
-                      @click.stop="addToCart(item.id)"
-                      >Add To Cart</v-btn
-                    >
+                    <div v-if="auth !== null">
+                      <v-btn
+                        class="my-2"
+                        color="red lighten-3 custom-btn"
+                        @click.stop="buyNow(item.id)"
+                        >Buy Now</v-btn
+                      ><br />
+                      <v-btn
+                        color="orange lighten-3 custom-btn"
+                        @click.stop="addToCart(item.id)"
+                        >Add To Cart</v-btn
+                      >
+                    </div>
+                    <div v-else>
+                      <div class="my-2">
+                        <Login
+                          :mode="authMode"
+                          buttonColor="red lighten-3 custom-btn"
+                          buttonText="Buy Now"
+                          @toggleMode="toggleAuthMode"
+                          @authSuccess="onAuthSuccess"
+                        />
+                      </div>
+                      <div>
+                        <Login
+                          :mode="authMode"
+                          buttonColor="orange lighten-3 custom-btn"
+                          buttonText="Add To Cart"
+                          @toggleMode="toggleAuthMode"
+                          @authSuccess="onAuthSuccess"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </v-flex>
               </v-layout>
@@ -193,15 +245,19 @@
                   @click="showProductDetails(item.id)"
                 >
                   <!-- Dummy Image on the Left -->
-                  <div style="width: 150px; margin: 10px">
+                  <div  class="col-md-6 col-sm-6 col-12">
                     <v-img
-                      :src="item?.photo ? item.photo : require('@/assets/DefaultProduct.png')"
+                      :src="
+                        item?.photo
+                          ? item.photo
+                          : require('@/assets/DefaultProduct.png')
+                      "
                       alt="Product Image"
                     ></v-img>
                   </div>
 
                   <!-- Product Details -->
-                  <div class="text-left">
+                  <div class="text-left col-md-6 col-sm-6 col-12">
                     <strong>{{ item.name }}</strong
                     ><br />
                     {{ item.descr }}<br />
@@ -231,17 +287,39 @@
                     ><br />
 
                     <!-- Action Buttons -->
-                    <v-btn
-                      class="my-2"
-                      color="red lighten-3 custom-btn"
-                      @click.stop="buyNow(item.id)"
-                      >Buy Now</v-btn
-                    ><br />
-                    <v-btn
-                      color="orange lighten-2 custom-btn"
-                      @click.stop="addToCart(item.id)"
-                      >Add To Cart</v-btn
-                    >
+                    <div v-if="auth !== null">
+                      <v-btn
+                        class="my-2"
+                        color="red lighten-3 custom-btn"
+                        @click.stop="buyNow(item.id)"
+                        >Buy Now</v-btn
+                      ><br />
+                      <v-btn
+                        color="orange lighten-3 custom-btn"
+                        @click.stop="addToCart(item.id)"
+                        >Add To Cart</v-btn
+                      >
+                    </div>
+                    <div v-else>
+                      <div class="my-2">
+                        <Login
+                          :mode="authMode"
+                          buttonColor="red lighten-3 custom-btn"
+                          buttonText="Buy Now"
+                          @toggleMode="toggleAuthMode"
+                          @authSuccess="onAuthSuccess"
+                        />
+                      </div>
+                      <div>
+                        <Login
+                          :mode="authMode"
+                          buttonColor="orange lighten-3 custom-btn"
+                          buttonText="Add To Cart"
+                          @toggleMode="toggleAuthMode"
+                          @authSuccess="onAuthSuccess"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </v-flex>
               </v-layout>
@@ -257,6 +335,7 @@
 import urls from "@/urls";
 // import urls from "../urls";
 import axios from "axios";
+import Login from "./Login.vue";
 // import SwiperComponent from './SwipeProducts.vue'
 
 export default {
@@ -266,6 +345,7 @@ export default {
       allProducts: [],
       topProducts: [],
       recentProducts: [],
+      authMode: "login",
       multiLine: false,
       snackbar: {
         value: false,
@@ -284,7 +364,7 @@ export default {
     };
   },
   name: "DashBoard",
-  components: {},
+  components: { Login },
   computed: {},
   created() {
     this.allProducts1();
@@ -342,13 +422,12 @@ export default {
             productId: value,
           })
           .then((response) => {
-            if(response.status===200){
+            if (response.status === 200) {
               this.snackbar.message = "Product added to cart successfully";
-            this.snackbar.color = "green";
-            this.snackbar.value = true;
+              this.snackbar.color = "green";
+              this.snackbar.value = true;
             }
             console.log(response);
-           
           });
       }
     },
@@ -358,6 +437,15 @@ export default {
     },
     showProductDetails(value) {
       window.location.href = `/ProductDetails/${value}`;
+    },
+
+    toggleAuthMode() {
+      this.authMode = this.authMode === "login" ? "signup" : "login";
+    },
+    onAuthSuccess(userData) {
+      console.log("User authenticated:", userData);
+      // this.$router.push(userData.userType === "SELLER" ? "/seller" : "/");
+      window.location.reload(true);
     },
   },
 };
