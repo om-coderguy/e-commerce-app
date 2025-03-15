@@ -32,6 +32,7 @@ public class ProductDTO {
     private Integer userId;
     private String userType;
     private String photo;
+    private boolean liked;
 
     /**
      * Convert Product entity to ProductDTO including seller user details
@@ -56,7 +57,33 @@ public class ProductDTO {
                 user.getMobileNo(),
                 user.getUserId(),
                 user.getUserType().toString(),
-                product.getPhoto()
+                product.getPhoto(),
+                false
+        );
+    }
+
+    public static ProductDTO toDTO(Product product,boolean liked) {
+        Seller seller = product.getSeller();
+        User user = seller.getUser();
+
+        return new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getDescr(),
+                product.getCost(),
+                product.getDiscount(),
+                product.isActive(),
+                seller.getSellerId(),
+                product.getCategory().getCatId(),
+                product.getSpecifications(),
+                user.getUserName(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getMobileNo(),
+                user.getUserId(),
+                user.getUserType().toString(),
+                product.getPhoto(),
+                liked
         );
     }
 

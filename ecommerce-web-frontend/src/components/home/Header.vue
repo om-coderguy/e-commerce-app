@@ -264,6 +264,7 @@ export default {
     items: [
       { id: "profile", title: "My profile" },
       { id: "orders", title: "My Orders" },
+      { id: "wishlist", title: "My Wishlist" },
       { id: "regSeller", title: "Register as Seller" },
       { id: "logout", title: "Log out" },
     ],
@@ -364,6 +365,9 @@ export default {
 
         case "orders":
           window.location.href = "/orders";
+          break;
+        case "wishlist":
+          window.location.href = "/wishlist";
           break;
 
         case "logout":

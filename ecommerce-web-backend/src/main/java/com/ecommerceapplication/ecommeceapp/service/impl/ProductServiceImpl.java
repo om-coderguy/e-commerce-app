@@ -9,14 +9,8 @@ import com.ecommerceapplication.ecommeceapp.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,8 +209,12 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepo.findById(recentProductDTO.getProductId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         User user = userService.getUserById(recentProductDTO.getUserId());
-        List<RecentProduct> recentProducts = user.getRecentProducts();
 
+        // Check if user has liked this product
+        boolean liked = likeRepository.existsByProductAndUser(product, user);
+
+        // Handle recent products logic
+        List<RecentProduct> recentProducts = user.getRecentProducts();
         if (recentProducts.isEmpty()) {
             recentProducts = new ArrayList<>();
             addNewRecentProduct(recentProducts, product, user);
@@ -236,7 +234,8 @@ public class ProductServiceImpl implements ProductService {
             addNewRecentProduct(recentProducts, product, user);
         }
 
-        return ProductDTO.toDTO(product);
+        // Convert to DTO including liked status
+        return ProductDTO.toDTO(product, liked);
     }
 
     private void addNewRecentProduct(List<RecentProduct> recentProducts, Product product, User user) {
@@ -297,6 +296,15 @@ public class ProductServiceImpl implements ProductService {
             reviewDTO.setComment(review.getComment());    // Comment
             return reviewDTO;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDTO> getLikedProducts(Integer userId) {
+        List<Like> likedProducts = likeRepository.findByUser_UserIdAndLikedTrue(userId);
+
+        return likedProducts.stream()
+                .map(like -> ProductDTO.toDTO(like.getProduct(), true)) // Setting liked = true
+                .collect(Collectors.toList());
     }
 
 }

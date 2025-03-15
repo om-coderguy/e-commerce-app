@@ -10,6 +10,7 @@ import DeliveryHome from '../components/delivery/DeliveryHome.vue'
 import BuyProduct from '../components/site-user/BuyProduct.vue'
 import ProductDetails from '@/components/site-user/ProductDetails.vue'
 import Unauthorized from '@/components/home/Unauthorized.vue'
+import WishlistProducts from '@/components/site-user/WishlistProducts.vue'
 
 
 Vue.use(Router)
@@ -103,6 +104,11 @@ const router = new Router({
       path: '/ProductDetails/:productId',
       name: 'Product Details',
       component: ProductDetails,
+    },
+    {
+      path: '/wishlist',
+      name: 'Liked Products',
+      component: WishlistProducts,
     },
     {
       path: '/unauthorized',
