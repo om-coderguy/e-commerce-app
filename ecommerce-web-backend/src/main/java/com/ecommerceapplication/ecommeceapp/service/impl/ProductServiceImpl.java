@@ -80,9 +80,9 @@ public class ProductServiceImpl implements ProductService {
     //    This is response for saving product
     private Map<String, Object> prepareProductResponse(Product product) {
         return Map.of(
-                "productId", product.getId(),
+                "id", product.getId(),
                 "name", product.getName(),
-                "description", product.getDescr(),
+                "descr", product.getDescr(),
                 "cost", product.getCost(),
                 "discount", product.getDiscount(),
                 "active", product.isActive(),

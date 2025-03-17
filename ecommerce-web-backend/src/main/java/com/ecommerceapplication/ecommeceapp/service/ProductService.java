@@ -14,7 +14,7 @@ public interface ProductService {
 
      Product getByProductId(int productId);
 
-     List<ProductDTO> getProductsBySellerUserId(Integer sellerId);
+     List<ProductDTO> getProductsBySellerUserId(Integer userId);
 
      List<ProductDTO> getTopProducts();
 
