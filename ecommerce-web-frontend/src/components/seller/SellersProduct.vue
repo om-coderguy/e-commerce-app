@@ -376,7 +376,6 @@ export default {
     editItem(item) {
       this.editedIndex = this.allProducts.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      console.log(this.editedItem);
       this.dialog = true;
     },
 
@@ -443,8 +442,9 @@ export default {
         axios
           .put(`${urls().products}/${productId}`, productData)
           .then((response) => {
-            console.log(response.data);
-            Object.assign(this.allProducts[this.editedIndex], this.editedItem);
+            console.log(response.data,this.editedIndex);
+            const index=this.allProducts.findIndex(item => item.id == productId);
+            Object.assign(this.allProducts[index], response.data);
             this.snackbar.message = "Product updated successfully";
             this.snackbar.color = "green";
             this.snackbar.value = true;

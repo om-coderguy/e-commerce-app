@@ -161,9 +161,9 @@ export default {
         .then((response) => {
           this.products.splice(index, 1);
           console.log(response.data);
-          this.snackbar.message = "Removed from cart successfully";
-          this.snackbar.color = "red";
-          this.snackbar.value = true;
+          // this.snackbar.message = "Removed from cart successfully";
+          // this.snackbar.color = "red";
+          // this.snackbar.value = true;
         })
         .catch((error) => {
           console.log(error);

@@ -4,7 +4,6 @@
       v-model="snackbar.value"
       class="snackbar pt-13"
       style="justify-content: right; align-items: flex-start"
-      :multi-line="multiLine"
       :color="snackbar.color"
     >
       <span class="snackbar-msg">{{ snackbar.message }}</span>
@@ -103,10 +102,10 @@ export default {
         password: "",
       },
       snackbar: {
-      value: false,
-      message: "",
-      color: "",
-    },
+        value: false,
+        message: "",
+        color: "",
+      },
       rules: {
         required: (value) => !!value || "Required.",
         userName: (value) => {
@@ -146,10 +145,11 @@ export default {
         this.snackbar.color = "green";
         this.dialog = false;
       } catch (error) {
-        console.error("Auth error:", error.response?.data || error.message);
+        console.error("Auth error:", error.response?.data);
         this.snackbar.value = true;
         this.snackbar.message = error.response?.data || "Something went wrong";
         this.snackbar.color = "red";
+        this.dialog = false;
         // alert(error.response?.data || "Something went wrong");
       }
     },
