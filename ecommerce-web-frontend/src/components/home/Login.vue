@@ -1,14 +1,14 @@
 <template>
   <div>
     <v-snackbar
-      v-model="snackbar.value"
+      v-model="snackbarValue"
       class="snackbar pt-13"
       style="justify-content: right; align-items: flex-start"
-      :color="snackbar.color"
+      :color="snackbarColor"
     >
-      <span class="snackbar-msg">{{ snackbar.message }}</span>
+      <span class="snackbar-msg">{{ snackbarMessage }}</span>
       <template v-slot:action="{ attrs }">
-        <v-btn text v-bind="attrs" @click="snackbar.value = false">
+        <v-btn text v-bind="attrs" @click="snackbarValue = false">
           Close
         </v-btn>
       </template>
@@ -101,11 +101,9 @@ export default {
         username: "",
         password: "",
       },
-      snackbar: {
-        value: false,
-        message: "",
-        color: "",
-      },
+      snackbarValue: false,
+      snackbarMessage: "",
+      snackbarColor: "",
       rules: {
         required: (value) => !!value || "Required.",
         userName: (value) => {
@@ -140,16 +138,15 @@ export default {
 
         localStorage.setItem("auth", JSON.stringify(response.data));
         this.$emit("authSuccess", response.data);
-        this.snackbar.value = true;
-        this.snackbar.message = "Login successful";
-        this.snackbar.color = "green";
+        this.snackbarValue = true;
+        this.snackbarMessage = "Login successful";
+        this.snackbarColor = "green";
         this.dialog = false;
       } catch (error) {
         console.error("Auth error:", error.response?.data);
-        this.snackbar.value = true;
-        this.snackbar.message = error.response?.data || "Something went wrong";
-        this.snackbar.color = "red";
-        this.dialog = false;
+        this.snackbarValue = true;
+        this.snackbarMessage = "Authentication failed";
+        this.snackbarColor = "red";
         // alert(error.response?.data || "Something went wrong");
       }
     },

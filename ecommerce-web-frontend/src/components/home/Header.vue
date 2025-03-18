@@ -183,7 +183,7 @@
             </div>
           </v-card>
         </v-dialog> -->
-        
+
         <Login
           :mode="authMode"
           :buttonText="authMode === 'login' ? 'LOG IN' : 'SIGN UP'"
@@ -262,7 +262,7 @@ export default {
       color: "",
     },
     items: [
-      { id: "profile", title: "My profile" },
+      // { id: "profile", title: "My profile" },
       { id: "orders", title: "My Orders" },
       { id: "wishlist", title: "My Wishlist" },
       { id: "regSeller", title: "Register as Seller" },
@@ -293,13 +293,16 @@ export default {
     },
     menuItems: function () {
       if (
-        this.auth?.userType == "SELLER" ||
-        this.auth?.userType == "SUPER_USER" ||
-        this.auth?.userType == "DELIVERY"
-      )
-        return this.items?.filter(
-          (item) => item.id !== "regSeller" && item.id !== "orders"
-        );
+        this.auth?.userType === "SELLER" ||
+        this.auth?.userType === "SUPER_USER" ||
+        this.auth?.userType === "DELIVERY"
+      ) {
+        return Array.isArray(this.items)
+          ? this.items.filter(
+              (item) => item.id !== "regSeller" && item.id !== "orders"
+            )
+          : [];
+      }
       return this.items;
     },
     isUser() {
