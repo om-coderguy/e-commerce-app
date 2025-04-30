@@ -1,24 +1,25 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="allProducts"
+    :items="allProducts || []"
     sort-by="name"
     class="elevation-1 ma-8"
   >
     <template v-slot:top>
       <v-snackbar
-        v-model="snackbar.value"
+        v-model="snackbarValue"
         class="snackbar pt-13"
         style="justify-content: right; align-items: flex-start"
-        :color="snackbar.color"
+        :color="snackbarColor"
       >
-        <span class="snackbar-msg">{{ snackbar.message }}</span>
+        <span class="snackbar-msg">{{ snackbarMessage }}</span>
         <template v-slot:action="{ attrs }">
-          <v-btn text v-bind="attrs" @click="snackbar.value = false">
+          <v-btn text v-bind="attrs" @click="snackbarValue = false">
             Close
           </v-btn>
         </template>
       </v-snackbar>
+
       <v-toolbar flat>
         <v-toolbar-title class="text-h5">My Products</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
@@ -78,20 +79,7 @@
                         item-value="catId"
                       >
                       </v-select>
-
-                      <!-- <v-text-field
-                      v-model="editedItem.categoryId"
-                      label="Category"
-                    ></v-text-field> -->
                     </v-col>
-                    <!-- <v-col cols="12">
-                      <v-file-input
-                        v-model="editedItem.photo"
-                        label="Upload Product Image"
-                        accept="image/*"
-                        show-size
-                      ></v-file-input>
-                    </v-col> -->
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -223,12 +211,10 @@ export default {
     dialog: false,
     dialogDelete: false,
     dialogSpec: false,
-    productInfo: null,
-    snackbar: {
-      value: false,
-      message: "",
-      color: "",
-    },
+    productInfo: {},
+    snackbarValue: false,
+    snackbarMessage: "",
+    snackbarColor: "",
     headers: [
       {
         text: "Product Name",
@@ -244,7 +230,7 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
-      id: 0,
+      id: null,
       name: "",
       descr: "",
       cost: "",
@@ -271,28 +257,7 @@ export default {
     rules: {
       required: (value) => !!value || "Required.",
     },
-    categories: [
-      {
-        catId: 1,
-        catName: "Cloths",
-      },
-      {
-        catId: 2,
-        catName: "Electronics",
-      },
-      {
-        catId: 3,
-        catName: "Shoes",
-      },
-      {
-        catId: 4,
-        catName: "Books",
-      },
-      {
-        catId: 5,
-        catName: "Pens",
-      },
-    ],
+    categories: [],
     allProducts: [],
     auth: [],
   }),
@@ -359,16 +324,16 @@ export default {
             newSpec
           );
           this.dialogSpec = false;
-          this.snackbar.message = "Specification added successfully";
-          this.snackbar.color = "green";
-          this.snackbar.value = true;
+          this.snackbarMessage = "Specification added successfully";
+          this.snackbarColor = "green";
+          this.snackbarValue = true;
         })
         .catch((error) => {
           console.log(error);
           if (error.response.status) {
-            this.snackbar.message = error.response.data;
-            this.snackbar.color = "red";
-            this.snackbar.value = true;
+            this.snackbarMessage = error.response.data;
+            this.snackbarColor = "red";
+            this.snackbarValue = true;
           }
         });
     },
@@ -390,17 +355,17 @@ export default {
         .delete(urls().products + "/delete/" + this.editedItem.id, {})
         .then((response) => {
           console.log(response.data);
-          this.snackbar.message = "Product deleted successfully";
-          this.snackbar.color = "red";
-          this.snackbar.value = true;
+          this.snackbarMessage = "Product deleted successfully";
+          this.snackbarColor = "red";
+          this.snackbarValue = true;
           this.allProducts.splice(this.editedIndex, 1);
         })
         .catch((error) => {
           console.log(error);
           if (error.response.status) {
-            this.snackbar.message = error.response.data;
-            this.snackbar.color = "red";
-            this.snackbar.value = true;
+            this.snackbarMessage = error.response.data;
+            this.snackbarColor = "red";
+            this.snackbarValue = true;
           }
         });
 
@@ -442,34 +407,38 @@ export default {
         axios
           .put(`${urls().products}/${productId}`, productData)
           .then((response) => {
-            console.log(response.data,this.editedIndex);
-            const index=this.allProducts.findIndex(item => item.id == productId);
+            console.log(response.data, this.editedIndex);
+            const index = this.allProducts.findIndex(
+              (item) => item.id == productId
+            );
             Object.assign(this.allProducts[index], response.data);
-            this.snackbar.message = "Product updated successfully";
-            this.snackbar.color = "green";
-            this.snackbar.value = true;
+            this.snackbarMessage = "Product updated successfully";
+            this.snackbarColor = "green";
+            this.snackbarValue = true;
           })
           .catch((error) => {
             console.error("Error updating product:", error);
-            this.snackbar.message = "Error updating product";
-            this.snackbar.color = "red";
-            this.snackbar.value = true;
+            this.snackbarMessage = "Error updating product";
+            this.snackbarColor = "red";
+            this.snackbarValue = true;
           });
       } else {
         axios
           .post(urls().products, productData)
           .then((response) => {
+            // this.allProducts.push(response.data);
             console.log(response.data);
-            this.allProducts.push(response.data);
-            this.snackbar.message = "Product added successfully";
-            this.snackbar.color = "green";
-            this.snackbar.value = true;
+            
+            this.getAllProducts(this.auth.userId);
+            this.snackbarMessage = "Product added successfully";
+            this.snackbarColor = "green";
+            this.snackbarValue = true;
           })
           .catch((error) => {
             console.error("Error creating product:", error);
-            this.snackbar.message = "Error creating product";
-            this.snackbar.color = "red";
-            this.snackbar.value = true;
+            this.snackbarMessage = "Error creating product";
+            this.snackbarColor = "red";
+            this.snackbarValue = true;
           });
       }
 
@@ -477,15 +446,20 @@ export default {
     },
 
     getAllProducts(value) {
+    this.allProducts=[];
       axios.get(urls().products + "/seller/" + value, {}).then((response) => {
         this.allProducts = response.data;
         console.log(this.allProducts);
-      });
+      }).catch((error)=>{
+    this.allProducts=[];
+
+        console.log(error);
+        
+      })
     },
     async allCates() {
       await axios.get(urls().categories, {}).then((response) => {
         this.categories = response.data;
-        console.log(this.category);
       });
     },
   },
